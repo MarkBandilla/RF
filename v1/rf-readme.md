@@ -1,0 +1,68 @@
+# RFv1
+
+Check list
+- Initialize
+  + Start Git
+  + Start Framework
+- Webpage
+  - FrontEnd Page
+- Admin
+  - BackEnd UI
+  - Login System
+  - Role-Base Access Control
+  - Organization Management
+  - User Management
+  - Project Management
+  - Task Management
+  - Issue Management
+  - Version Control
+- Core
+  - Coder UI
+  - Designer UI
+  - DBase UI
+  - Query UI
+  - Functions UI
+  - Testing UI
+- Coder
+  - View Directory Content
+    - Select File / Folder
+    - Multi Select Files / Folders
+    - Search File / Folder
+    - Find in Folder
+  - Context Menu
+    - Create File / Folder
+    - Delete File / Folder
+    - Rename File / Folder
+    - Move File / Folder
+    - Duplicate File / Folder
+  - File Manipulation
+    - Select and Display a File
+    - Modify and Save File
+    - Open Multiple Files
+    - Switch Between Files
+    - Save Files Accordingly
+    - Find in File
+  - Project Preview
+    - Project Browser
+    - Auto Refresh
+    - Console Logs
+  - Templating
+    - Create Template
+    - Create File from Template
+  - Save and Publish
+  - Configurations
+- Designer
+  - Menu Builder
+  - Page Builder
+  - Design Stage Switcher
+  - CSS Editor
+  - Content Editor
+  - Component Builder
+  - Template Editor
+  - Template Loader
+  - Template Publisher
+- DBaseManager
+  - Schema Builder
+- QueryBuilder
+- FunctionBuilder
+- Tester
