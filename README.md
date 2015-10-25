@@ -1,11 +1,21 @@
 # RF
 
 Check list
-- Core
+- Initialize
   + Start Git
   + Start Framework
+- Webpage
+  - FrontEnd Page
+- Admin
+  - BackEnd UI
+  - Project Management
+- Core
   - Coder UI
   - Designer UI
+  - DBase UI
+  - Query UI
+  - Functions UI
+  - Testing UI
 - Coder
   - View Directory Content
   - Select and Display a File
@@ -22,4 +32,3 @@ Check list
 - QueryBuilder
 - FunctionBuilder
 - Tester
-- ProjectManager
