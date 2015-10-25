@@ -3,7 +3,7 @@
 Check list
 - Core
   + Start Git
-  - Start Framework
+  + Start Framework
   - Coder UI
   - Designer UI
 - Coder
