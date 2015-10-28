@@ -1,5 +1,22 @@
 var rfSQL = {
 	db: null,
+	lm: 0,
+	connect: function (params) {
+		var params = $.extend({
+			dbname: 'db',
+			version: '1.0',
+			description: 'description'
+		}, params);
+
+		var odb = window.openDatabase;
+	    
+	    if(!odb) {
+	        return 'Web SQL Not Supported';
+	    } else {
+	        this.db = odb( params.dbname, params.version, params.description, 10 * 1024 * 1024 );
+	        return params.dbname + '::DB was created!';
+	    }
+	},
 	exec: function (params) {
 		var params = $.extend({
 			query: '',
@@ -20,34 +37,34 @@ var rfSQL = {
 	        );
 	    });
 	},
-	read: function (params) {
+	migrate: function (params) {
 		var params = $.extend({
-			query: '',
-			values: []
+			migration: rfMigration,
+			success: function (data) { console.log (data); },
+			error: function (data) { console.log (data); }
 		}, params);
 
-		if(!this.db) return;
-		
-		this.db.readTransaction(function (t) {
-            t.executeSql(params.query, params.values, function (t, r) {
-                return r.rows;
-            });
-        });
-	},
-	connect: function (params) {
-		var params = $.extend({
-			dbname: 'db',
-			version: '1.0',
-			description: 'description'
-		}, params);
+		var m = params.migration;
+		var result = {};
+		var s = [];
+		var e = [];
 
-		var odb = window.openDatabase;
-	    
-	    if(!odb) {
-	        return 'Web SQL Not Supported';
-	    } else {
-	        this.db = odb( params.dbname, params.version, params.description, 10 * 1024 * 1024 );
-	        return params.dbname + '::DB was created!';
-	    }
+		$.each(m, function(i) {
+			rfSQL.exec({ 
+				query: m[i].up, 
+				values: m[i].values , 
+				success: function(data){
+					result = { status: 'Success::', name: m[i].name, query: m[i].up, data: data };
+					rfSQL.lm = m[i].id;
+					console.log(result); 
+				}, 
+				error: function(data){ 
+					result = { status: 'Error::', name: m[i].name, query: m[i].up, data: data };
+					console.log(result); 
+				} 
+			});
+		});
+
+		console.log(rfSQL.lm);
 	}
 };
