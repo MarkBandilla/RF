@@ -32,7 +32,7 @@ var rfSQL = {
 	        	function (t, r) {
 		            params.success(r.rows);
 		        }, function (t, e) {
-		        	params.error("Error : '" + params.query + "' : " + e.message);
+		        	params.error("Error : '" + params.query + "', [" + params.values.join() + "] : " + e.message);
 		        }
 	        );
 	    });
@@ -69,5 +69,35 @@ var rfSQL = {
 	},
 	rollback: function (params) {
 
+	},
+	seed: function(params) {
+		var params = $.extend({
+			table: 'users',
+			rows: 10,
+			success: function (data) { console.log (data); },
+			error: function (data) { console.log (data); }
+		}, params);
+
+		var schema = rfSQL.schema({ table: params.table });
+
+	},
+	schema: function(params) {
+		var params = $.extend({
+			table: 'users',
+			success: function (data) { console.log (data); },
+			error: function (data) { console.log (data); }
+		}, params);
+
+		var query = "DESCRIBE " + params.table;
+
+		rfSQL.exec({ 
+			query: query, 
+			success: function(data){
+				params.success(JSON.stringify(data));
+			}, 
+			error: function(data){ 
+				params.error(data);
+			} 
+		});
 	}
 };
