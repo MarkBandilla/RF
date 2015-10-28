@@ -40,7 +40,7 @@ var rfSQL = {
 	migrate: function (params) {
 		var params = $.extend({
 			migration: rfMigration,
-			success: function (data) { console.log (data); },
+			success: function (data) { console.log (data, 'Migrated:: ' + rfSQL.lm); },
 			error: function (data) { console.log (data); }
 		}, params);
 
@@ -52,19 +52,19 @@ var rfSQL = {
 		$.each(m, function(i) {
 			rfSQL.exec({ 
 				query: m[i].up, 
-				values: m[i].values , 
+				values: m[i].values, 
 				success: function(data){
 					result = { status: 'Success::', name: m[i].name, query: m[i].up, data: data };
 					rfSQL.lm = m[i].id;
-					console.log(result); 
+
+					params.success(result);
 				}, 
 				error: function(data){ 
 					result = { status: 'Error::', name: m[i].name, query: m[i].up, data: data };
-					console.log(result); 
+					
+					params.error(result); 
 				} 
 			});
 		});
-
-		console.log(rfSQL.lm);
 	}
 };
