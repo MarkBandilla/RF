@@ -14,7 +14,7 @@ var rfSQL = {
 	        return 'Web SQL Not Supported';
 	    } else {
 	        this.db = odb( params.dbname, params.version, params.description, 10 * 1024 * 1024 );
-	        return params.dbname + '::DB was created!';
+	        return 'DB::' + params.dbname + ' was created!';
 	    }
 	},
 	exec: function (params) {
@@ -66,5 +66,8 @@ var rfSQL = {
 				} 
 			});
 		});
+	},
+	rollback: function (params) {
+
 	}
 };
