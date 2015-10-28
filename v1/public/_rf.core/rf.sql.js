@@ -21,7 +21,7 @@ var rfSQL = {
 		var params = $.extend({
 			query: '',
 			values: [],
-			success: function (data) { console.log (data); },
+			success: function (data) { console.log (JSON.stringify(data)); },
 			error: function (data) { console.log (data); }
 		}, params);
 
@@ -35,7 +35,14 @@ var rfSQL = {
 		        	params.error("Error : '" + params.query + "', [" + params.values.join() + "] : " + e.message);
 		        }
 	        );
-	    });
+	    }, function (t, e){ 
+			params.success('Insert row: ' + e.message); 
+		}, function() {
+            
+        });
+	},
+	query: function (params) {
+		rfSQL.exec({query: params.query, values: params.values});
 	},
 	migrate: function (params) {
 		var params = $.extend({
