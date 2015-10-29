@@ -25,14 +25,17 @@ var rfSQL = {
 			error: function (data) { console.log (data); }
 		}, params);
 
-		if(!this.db) return;
+		if(!this.db) {
+			params.error("Error:: DB does not exists");
+			return;
+		} 
 
 		this.db.transaction(function (t) {
 	        t.executeSql(params.query, params.values, 
 	        	function (t, r) {
 		            params.success(r.rows);
 		        }, function (t, e) {
-		        	params.error("Error : '" + params.query + "', [" + params.values.join() + "] : " + e.message);
+		        	params.error("Error:: '" + params.query + "', [" + params.values.join() + "] : " + e.message);
 		        }
 	        );
 	    }, function (t, e){ 
