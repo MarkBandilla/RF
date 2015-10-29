@@ -70,10 +70,22 @@ var rfInput = [
 		table: 'datatypes',
 		method: 'createColumn',
 		column: [
-			{ type: 'string' },
+			{ type: 'string', name: 'string', 
+				params: {
+					label: 'String',
+					placeholder: 'put a string',
+					default: 'string',
+					validation: {
+						required: true,
+						min: 3,
+						max: 10
+					}
+				}
+			},
 			{ type: 'number' },
 			{ type: 'float' },
 			{ type: 'email' },
+			{ type: 'url' },
 			{ type: 'password' },
 			{ type: 'text' },
 			{ type: 'blob' },
@@ -88,46 +100,61 @@ var rfInput = [
 			{ type: 'image' },
 			{ type: 'avatar' },
 
-			{ type: 'radio', params: {
-				options: ['on', 'off']
+			{ type: 'radio', 
+				params: {
+					options: ['on', 'off']
 				}
 			},
-			{ type: 'checkbox', params: {
-				options: ['value1', 'value2']
+			{ type: 'checkbox', 
+				params: {
+					options: ['value1', 'value2']
 				} 
 			},
-			{ type: 'select', params: { 
-				multiple: false, 
-				values: [1, 0], 
-				options: ['active', 'inactive']
+			{ type: 'select', 
+				params: { 
+					multiple: false, 
+					values: [1, 0], 
+					options: ['active', 'inactive']
 				} 
 			},
-			{ type: 'query', params: { 
-				query: rfQuery.function, 
-				multiple: false, 
-				values: "id", 
-				options: "column" 
+			{ type: 'query', 
+				params: { 
+					query: rfQuery.function, 
+					multiple: false, 
+					values: "id", 
+					options: "column" 
 				} 
 			},
-			{ type: 'country', params: { 
-				query: rfQuery.country, 
-				multiple: false, 
-				values: "id", 
-				options: "country" 
+			{ type: 'country', 
+				params: { 
+					query: rfQuery.country, 
+					multiple: false, 
+					values: "id", 
+					options: "country" 
 				} 
 			},
-			{ type: 'language', params: { 
-				query: rfQuery.language, 
-				multiple: false, 
-				values: "id", 
-				options: "language" 
+			{ type: 'language', 
+				params: { 
+					query: rfQuery.language, 
+					multiple: false, 
+					values: "id", 
+					options: "language" 
 				} 
 			},
-			{ type: 'icon', params: { 
-				query: rfQuery.icons, 
-				multiple: false, 
-				values: "id", 
-				options: "icon" 
+			{ type: 'icon', 
+				params: { 
+					query: rfQuery.icons, 
+					multiple: false, 
+					values: "id", 
+					options: "icon" 
+				} 
+			},
+			{ type: 'session', 
+				params: { 
+					query: rfQuery.icons, 
+					multiple: false, 
+					values: "id", 
+					options: "icon" 
 				} 
 			}
 		]
