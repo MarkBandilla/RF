@@ -73,7 +73,7 @@ var rfInput = [
 			{ type: 'string', name: 'string', 
 				params: {
 					label: 'String',
-					placeholder: 'put a string',
+					placeholder: 'put a string here..',
 					default: 'string',
 					validation: {
 						required: true,
@@ -82,13 +82,96 @@ var rfInput = [
 					}
 				}
 			},
-			{ type: 'number' },
-			{ type: 'float' },
-			{ type: 'email' },
-			{ type: 'url' },
-			{ type: 'password' },
-			{ type: 'text' },
-			{ type: 'blob' },
+			{ type: 'number', name: 'number', 
+				params: {
+					label: 'Number',
+					placeholder: '(+63) 000-000-0000',
+					default: '',
+					validation: {
+						mask: '(+99) 999-999-9999',
+						min: 100,
+						max: 200
+					}
+				}
+			},
+			{ type: 'float', name: 'float',
+				params: {
+					label: 'Float',
+					placeholder: '000.00',
+					default: '',
+					validation: {
+						mask: '999.99',
+						min: 0.00,
+						max: 0.00
+					}
+				}
+			},
+			{ type: 'currency', name: 'currency',
+				params: {
+					label: 'Currency',
+					placeholder: '0,000,000.00',
+					default: '',
+					validation: {
+						currency: 'PHP',
+						mask: '9,999,999.99',
+						min: 0.00,
+						max: 0.00
+					}
+				}
+			},
+			{ type: 'email', name: 'email',
+				params: {
+					label: 'E-Mail',
+					placeholder: 'mail@host.com',
+					default: '',
+					validation: {
+						blacklist: ['@yopmail.com', '@host.com'],
+						unique: true;
+					}
+				}
+			},
+			{ type: 'url', name: 'url',
+				params: {
+					label: 'URL',
+					placeholder: 'http://www.yourwebsite.com',
+					default: '',
+					validation: {
+						mask: 'http://www.???.com'
+					}
+				} 
+			},
+			{ type: 'ip', name: 'ip',
+				params: {
+					label: 'IP',
+					placeholder: '192.168.1.100',
+					default: '',
+					validation: {
+						mask: '999.999.999.999'
+					}
+				} 
+			},
+			{ type: 'password', name: 'password',
+				params: {
+					label: 'Password',
+					placeholder: '*****',
+					default: '',
+					validation: {
+						retype: true,
+						strength: 'Very Strong'
+					}
+				}
+			},
+			{ type: 'text', name: 'text',
+				params: {
+					label: 'Text',
+					placeholder: 'Short Bio',
+					default: '',
+					validation: {
+						minphar: 0,
+						maxphar: 3
+					}
+				}
+			},
 
 			{ type: 'date' },
 			{ type: 'time' },
@@ -96,9 +179,54 @@ var rfInput = [
 			{ type: 'daterange' },
 			{ type: 'datetimerange' },
 
-			{ type: 'file' },
-			{ type: 'image' },
-			{ type: 'avatar' },
+			{ type: 'blob', name: 'blob', 
+				params: {
+					label: 'Blob',
+					default: '',
+					validation: {
+						minsize: 0,
+						maxsize: 10000,
+					}
+				}
+			},
+			{ type: 'file' name: 'file', 
+				params: {
+					label: 'File',
+					default: '',
+					validation: {
+						minsize: 0,
+						maxsize: 10000,
+						ext: ['.psd','.doc'],
+						loc: 'uploads/files'
+					}
+				}
+			},
+			{ type: 'image' name: 'image',
+				params: {
+					label: 'Image',
+					default: '',
+					validation: {
+						minsize: 0,
+						maxsize: 10000,
+						ext: ['.jpg','.png','.gif'],
+						width: [10,50,100],
+						height: [10,50,100],
+						loc: 'uploads/images'
+					}
+				}
+			},
+			{ type: 'avatar' name: 'avatar',
+					label: 'Avatar',
+					default: '',
+					validation: {
+						minsize: 0,
+						maxsize: 10000,
+						ext: ['.jpg','.png','.gif'],
+						width: [50],
+						height: [10,50,100]
+					}
+				}
+			},
 
 			{ type: 'radio', 
 				params: {
