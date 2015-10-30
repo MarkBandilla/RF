@@ -77,6 +77,9 @@ var rfInput = [
 					default: 'string',
 					validation: {
 						required: true,
+						before: '$',
+						after: false,
+						mask: '',
 						min: 3,
 						max: 10
 					}
@@ -106,19 +109,6 @@ var rfInput = [
 					}
 				}
 			},
-			{ type: 'currency', name: 'currency',
-				params: {
-					label: 'Currency',
-					placeholder: '0,000,000.00',
-					default: '',
-					validation: {
-						currency: 'PHP',
-						mask: '9,999,999.99',
-						min: 0.00,
-						max: 0.00
-					}
-				}
-			},
 			{ type: 'email', name: 'email',
 				params: {
 					label: 'E-Mail',
@@ -137,16 +127,6 @@ var rfInput = [
 					default: '',
 					validation: {
 						mask: 'http://www.???.com'
-					}
-				} 
-			},
-			{ type: 'ip', name: 'ip',
-				params: {
-					label: 'IP',
-					placeholder: '192.168.1.100',
-					default: '',
-					validation: {
-						mask: '999.999.999.999'
 					}
 				} 
 			},
@@ -172,23 +152,8 @@ var rfInput = [
 					}
 				}
 			},
-
 			{ type: 'date' },
 			{ type: 'time' },
-			{ type: 'datetime' },
-			{ type: 'daterange' },
-			{ type: 'datetimerange' },
-
-			{ type: 'blob', name: 'blob', 
-				params: {
-					label: 'Blob',
-					default: '',
-					validation: {
-						minsize: 0,
-						maxsize: 10000,
-					}
-				}
-			},
 			{ type: 'file' name: 'file', 
 				params: {
 					label: 'File',
@@ -198,32 +163,6 @@ var rfInput = [
 						maxsize: 10000,
 						ext: ['.psd','.doc'],
 						loc: 'uploads/files'
-					}
-				}
-			},
-			{ type: 'image' name: 'image',
-				params: {
-					label: 'Image',
-					default: '',
-					validation: {
-						minsize: 0,
-						maxsize: 10000,
-						ext: ['.jpg','.png','.gif'],
-						width: [10,50,100],
-						height: [10,50,100],
-						loc: 'uploads/images'
-					}
-				}
-			},
-			{ type: 'avatar' name: 'avatar',
-					label: 'Avatar',
-					default: '',
-					validation: {
-						minsize: 0,
-						maxsize: 10000,
-						ext: ['.jpg','.png','.gif'],
-						width: [50],
-						height: [10,50,100]
 					}
 				}
 			},
@@ -253,6 +192,84 @@ var rfInput = [
 					options: "column" 
 				} 
 			},
+			{ type: 'session', 
+				params: { 
+					query: rfQuery.icons, 
+					multiple: false, 
+					values: "id", 
+					options: "icon" 
+				} 
+			}
+		]
+	}, {
+		id: 3,
+		name: 'add_column_into_datatypes',
+		table: 'datatypes',
+		method: 'createColumn',
+		column: [
+			{ type: 'currency', name: 'currency',
+				params: {
+					label: 'Currency',
+					placeholder: '0,000,000.00',
+					default: '',
+					validation: {
+						currency: 'PHP',
+						mask: '9,999,999.99',
+						min: 0.00,
+						max: 0.00
+					}
+				}
+			},
+			{ type: 'ip', name: 'ip',
+				params: {
+					label: 'IP',
+					placeholder: '192.168.1.100',
+					default: '',
+					validation: {
+						mask: '999.999.999.999'
+					}
+				} 
+			},
+			{ type: 'datetime' },
+			{ type: 'daterange' },
+			{ type: 'datetimerange' },
+
+			{ type: 'blob', name: 'blob', 
+				params: {
+					label: 'Blob',
+					default: '',
+					validation: {
+						minsize: 0,
+						maxsize: 10000,
+					}
+				}
+			},
+			{ type: 'image' name: 'image',
+				params: {
+					label: 'Image',
+					default: '',
+					validation: {
+						minsize: 0,
+						maxsize: 10000,
+						ext: ['.jpg','.png','.gif'],
+						width: [10,50,100],
+						height: [10,50,100],
+						loc: 'uploads/images'
+					}
+				}
+			},
+			{ type: 'avatar' name: 'avatar',
+					label: 'Avatar',
+					default: '',
+					validation: {
+						minsize: 0,
+						maxsize: 10000,
+						ext: ['.jpg','.png','.gif'],
+						width: [50],
+						height: [10,50,100]
+					}
+				}
+			},
 			{ type: 'country', 
 				params: { 
 					query: rfQuery.country, 
@@ -270,14 +287,6 @@ var rfInput = [
 				} 
 			},
 			{ type: 'icon', 
-				params: { 
-					query: rfQuery.icons, 
-					multiple: false, 
-					values: "id", 
-					options: "icon" 
-				} 
-			},
-			{ type: 'session', 
 				params: { 
 					query: rfQuery.icons, 
 					multiple: false, 
