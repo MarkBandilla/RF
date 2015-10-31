@@ -154,7 +154,7 @@ var rfInput = [
 			},
 			{ type: 'date' },
 			{ type: 'time' },
-			{ type: 'file' name: 'file', 
+			{ type: 'file', name: 'file', 
 				params: {
 					label: 'File',
 					default: '',
@@ -244,7 +244,7 @@ var rfInput = [
 					}
 				}
 			},
-			{ type: 'image' name: 'image',
+			{ type: 'image', name: 'image',
 				params: {
 					label: 'Image',
 					default: '',
@@ -258,7 +258,8 @@ var rfInput = [
 					}
 				}
 			},
-			{ type: 'avatar' name: 'avatar',
+			{ type: 'avatar', name: 'avatar',
+				params: {
 					label: 'Avatar',
 					default: '',
 					validation: {
@@ -306,4 +307,4 @@ function sortByKey(array, key) {
     });
 }
 
-people = sortByKey(people, 'name');
+console.log(sortByKey(rfInput, 'id'));
