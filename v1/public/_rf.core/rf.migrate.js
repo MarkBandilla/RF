@@ -116,7 +116,7 @@ var rfInput = [
 					default: '',
 					validation: {
 						blacklist: ['@yopmail.com', '@host.com'],
-						unique: true;
+						unique: true
 					}
 				}
 			},
