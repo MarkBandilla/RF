@@ -1,10 +1,20 @@
 var rfMigration = [
 	{ 
+		id: 0, 
+		name: 'drop_table_user', 
+		up: 'DROP TABLE users',
+		down: 'CREATE TABLE IF NOT EXISTS users (' +
+            'email TEXT,' +
+            'password TEXT,' +
+            'fullname TEXT' +
+        ')',
+		value: []
+	}, {
 		id: 1, 
 		name: 'create_table_user', 
 		up: 'CREATE TABLE IF NOT EXISTS users (' +
             'id INTEGER PRIMARY KEY,' +
-            'username TEXT,' +
+            'email TEXT,' +
             'password TEXT,' +
             'fullname TEXT' +
         ')',
@@ -24,39 +34,52 @@ var rfMigration = [
 	},
 ];
 
-var rfMig = [
-	{
+var rfSchema = {	
+	users : {
 		id: 1,
-		name: 'create_table_users',
 		table: 'users',
-		up: {
-			method: 'createTable'
-		},
-		down: {
-			method: 'dropTable'
-		}
-	}, {
-		id: 2,
-		name: 'create_column_into_users',
-		table: 'users',
-		up: {
-			method: 'createColumn',
-			column: [
-				{ name: 'username', label: 'UserName', type: 'text', required: 'required', info: 'Fullname'  },
-				{ name: 'password', label: 'PassWord', type: 'password', required: '', info: 'email@hostname.com' },
-				{ name: 'fullname', label: 'FullName', type: 'text', required: '', info: '0000-000-0000' }
-			]
-		},
-		down: {
-			method: 'dropColumn',
-			column: [
-				{ name: 'username' },
-				{ name: 'password' },
-				{ name: 'fullname' }
-			]
-		}
+		method: 'createColumn',
+		column: [
+			{ type: 'string', name: 'fullname', seed: 'fullname',  order: 3,
+				params: {
+					label: 'Fullname',
+					placeholder: 'FirstName M.I. SurName',
+					default: 'string',
+					validation: {
+						required: true,
+						before: '#',
+						after: false,
+						mask: '',
+						min: 3,
+						max: 100
+					}
+				}
+			},
+			{ type: 'email', name: 'email', seed: 'email', order: 1,
+				params: {
+					label: 'E-Mail',
+					placeholder: 'mail@host.com',
+					default: '',
+					validation: {
+						blacklist: ['@yopmail.com', '@host.com'],
+						unique: true
+					}
+				}
+			},
+			{ type: 'password', name: 'password', seed: 'password', order: 2,
+				params: {
+					label: 'Password',
+					placeholder: '*****',
+					default: '',
+					validation: {
+						retype: true,
+						strength: 'Very Strong'
+					}
+				}
+			}
+		]
 	}
-]
+}
 
 var rfInput = [
 	{
@@ -306,5 +329,3 @@ function sortByKey(array, key) {
         return ((x < y) ? -1 : ((x > y) ? 1 : 0));
     });
 }
-
-console.log(sortByKey(rfInput, 'id'));

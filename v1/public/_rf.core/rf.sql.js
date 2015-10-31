@@ -1,6 +1,7 @@
 var rfSQL = {
 	db: null,
 	lm: 0,
+
 	connect: function (params) {
 		var params = $.extend({
 			dbname: 'db',
@@ -44,9 +45,6 @@ var rfSQL = {
             
         });
 	},
-	query: function (params) {
-		rfSQL.exec({query: params.query, values: params.values});
-	},
 	migrate: function (params) {
 		var params = $.extend({
 			migration: rfMigration,
@@ -80,7 +78,7 @@ var rfSQL = {
 	rollback: function (params) {
 
 	},
-	seed: function(params) {
+	seed: function (params) {
 		var params = $.extend({
 			table: 'users',
 			rows: 10,
@@ -90,24 +88,77 @@ var rfSQL = {
 
 		var schema = rfSQL.schema({ table: params.table });
 
+		if(schema) {
+			var column_names = [];
+			var column_types = [];
+
+			$.each(schema, function (c, v) {
+				column_names.push( v.name );
+				column_types.push( v.seed );
+			});
+			for( var i = 0; i < 10; i ++ ) {
+				// console.log('Seed:: ' + i);
+
+				var column_count = [];
+				var column_values = [];
+
+				for( var j = 0; j < column_names.length; j ++ ) {
+					var faker = rfSQL.faker({ type: column_types[j] });
+
+					column_values.push(faker);
+					column_count.push('?');
+					// console.log(i + ' ' + column_names[j] + ' : ' + column_types[j] + ' - ' + column_values[j]);
+				}
+
+				var query = "INSERT INTO " + params.table + " ( " + column_names.join() + " ) VALUES ( " + column_count.join() + " )";
+				var values = column_values;
+				//console.log(query, values);
+
+				rfSQL.exec({ query: query, values: values });
+			}
+
+			params.success('Seed:: ' + params.rows + 'rows into ' + params.table);
+		} else {
+			params.error('Error:: Could not read schema from ' + params.table);
+		}
+
 	},
-	schema: function(params) {
+	schema: function (params) {
 		var params = $.extend({
-			table: 'users',
-			success: function (data) { console.log (data); },
-			error: function (data) { console.log (data); }
+			table: 'users'
 		}, params);
 
-		var query = "DESCRIBE " + params.table;
+		var schema = rfSchema[params.table];
+		// console.log('Schema:: ' + params.table, schema);
 
-		rfSQL.exec({ 
-			query: query, 
-			success: function(data){
-				params.success(JSON.stringify(data));
-			}, 
-			error: function(data){ 
-				params.error(data);
-			} 
-		});
+		if(schema) {
+			console.log(params.table + ' : ');
+
+			var column = sortByKey(schema.column, 'order');
+
+			return column;
+		} else {
+			return 'error';
+		}
+	},
+	faker: function (params) {
+		var params = $.extend({
+			type: 'string'
+		}, params);
+
+		switch(params.type) {
+			case 'string':
+				return faker.hacker.phrase();
+			break;
+			case 'fullname':
+				return faker.name.findName();
+			break;
+			case 'email':
+				return faker.internet.email();
+			break;
+			case 'password':
+				return 'password';
+			break;
+		}
 	}
 };
