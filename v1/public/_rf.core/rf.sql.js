@@ -96,7 +96,7 @@ var rfSQL = {
 				column_names.push( v.name );
 				column_types.push( v.seed );
 			});
-			for( var i = 0; i < 10; i ++ ) {
+			for( var i = 0; i < params.rows; i ++ ) {
 				// console.log('Seed:: ' + i);
 
 				var column_count = [];
