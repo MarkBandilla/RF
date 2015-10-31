@@ -49,7 +49,8 @@ error response:
 Error:: DB does not exists
 ```
 ```
-Error:: 'SELECT * FROM tbl_users WHERE id = ? AND status = ?', [1,Active] : could not prepare statement (1 no such table: tbl_users)
+Error:: 'SELECT * FROM tbl_users WHERE id = ? AND status = ?', [1,Active] 
+: could not prepare statement (1 no such table: tbl_users)
 ```
 success response:
 ```
