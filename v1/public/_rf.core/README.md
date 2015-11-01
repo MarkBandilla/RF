@@ -76,6 +76,7 @@ Insert row: 1
 
 ### rfSQL.seed
 >Execute Database Seeding
+>Requires rfMigration
 
 
 
@@ -91,6 +92,7 @@ rfFunction implements Function call
 
 ### rfFunction.schema
 >Execute get table schema
+>Requires rfMigration
 
 
 ### rfFunction.sort
