@@ -86,7 +86,7 @@ var rfSQL = {
 			error: function (data) { console.log (data); }
 		}, params);
 
-		var schema = rfSQL.schema({ table: params.table });
+		var schema = rfFunc.schema({ table: params.table });
 
 		if(schema) {
 			var column_names = [];
@@ -103,7 +103,7 @@ var rfSQL = {
 				var column_values = [];
 
 				for( var j = 0; j < column_names.length; j ++ ) {
-					var faker = rfSQL.faker({ type: column_types[j] });
+					var faker = rfFunc.faker({ type: column_types[j] });
 
 					column_values.push(faker);
 					column_count.push('?');
@@ -114,7 +114,14 @@ var rfSQL = {
 				var values = column_values;
 				//console.log(query, values);
 
-				rfSQL.exec({ query: query, values: values });
+				rfSQL.exec({ query: query, values: values, 
+					success: function(data) {
+						params.success({ table: params.table, query: this.query, values: this.values });
+					},
+					error: function(data) {
+						params.error(data);
+					}
+				});
 			}
 
 			params.success('Seed:: ' + params.rows + 'rows into ' + params.table);
@@ -122,43 +129,5 @@ var rfSQL = {
 			params.error('Error:: Could not read schema from ' + params.table);
 		}
 
-	},
-	schema: function (params) {
-		var params = $.extend({
-			table: 'users'
-		}, params);
-
-		var schema = rfSchema[params.table];
-		// console.log('Schema:: ' + params.table, schema);
-
-		if(schema) {
-			console.log(params.table + ' : ');
-
-			var column = sortByKey(schema.column, 'order');
-
-			return column;
-		} else {
-			return 'error';
-		}
-	},
-	faker: function (params) {
-		var params = $.extend({
-			type: 'string'
-		}, params);
-
-		switch(params.type) {
-			case 'string':
-				return faker.hacker.phrase();
-			break;
-			case 'fullname':
-				return faker.name.findName();
-			break;
-			case 'email':
-				return faker.internet.email();
-			break;
-			case 'password':
-				return 'password';
-			break;
-		}
 	}
 };
