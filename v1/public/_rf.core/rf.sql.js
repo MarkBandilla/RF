@@ -86,7 +86,7 @@ var rfSQL = {
 			error: function (data) { console.log (data); }
 		}, params);
 
-		var schema = rfFunc.schema({ table: params.table });
+		var schema = rfFunction.schema({ table: params.table });
 
 		if(schema) {
 			var column_names = [];
@@ -103,7 +103,7 @@ var rfSQL = {
 				var column_values = [];
 
 				for( var j = 0; j < column_names.length; j ++ ) {
-					var faker = rfFunc.faker({ type: column_types[j] });
+					var faker = rfFunction.faker({ type: column_types[j] });
 
 					column_values.push(faker);
 					column_count.push('?');
@@ -128,6 +128,5 @@ var rfSQL = {
 		} else {
 			params.error('Error:: Could not read schema from ' + params.table);
 		}
-
-	}
+	},
 };

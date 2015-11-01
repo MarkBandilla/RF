@@ -1,4 +1,4 @@
-var rfFunc = {
+var rfFunction = {
 	schema: function (params) {
 		var params = $.extend({
 			table: 'users'

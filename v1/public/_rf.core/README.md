@@ -63,3 +63,40 @@ Insert row: 1
 }
 ```
 
+
+### rfSQL.migrate
+>Execute Database Migration
+>Requires rfMigration
+
+
+### rfSQL.rollback
+>Execute Database Rollback
+>Requires rfMigration
+
+
+### rfSQL.seed
+>Execute Database Seeding
+
+
+
+# rfMigration
+rfMigration implements Database Migration
+
+
+
+# rfFunction
+rfFunction implements Function call
+
+
+
+### rfFunction.schema
+>Execute get table schema
+
+
+### rfFunction.sort
+>Execute array sorting by key
+
+
+
+
+
