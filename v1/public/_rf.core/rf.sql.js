@@ -47,7 +47,8 @@ var rfSQL = {
 	},
 	migrate: function (params) {
 		var params = $.extend({
-			migration: rfMigration,
+			//migration: rfMigration,
+			migration: rfMigrate,
 			success: function (data) { console.log (data, 'Migrated:: ' + rfSQL.lm); },
 			error: function (data) { console.log (data); }
 		}, params);
@@ -58,21 +59,24 @@ var rfSQL = {
 		var e = [];
 
 		$.each(m, function(i) {
-			rfSQL.exec({ 
-				query: m[i].up, 
-				values: m[i].values, 
-				success: function(data){
-					result = { status: 'Success::', name: m[i].name, query: m[i].up, data: data };
-					rfSQL.lm = m[i].id;
+			$.each(m[i].up, function(j){
+				rfSQL.exec({ 
+					query: m[i].up[j], 
+					values: m[i].values, 
+					success: function(data){
+						result = { status: 'Success::', name: m[i].name, query: m[i].up, data: data };
+						rfSQL.lm = m[i].id;
 
-					params.success(result);
-				}, 
-				error: function(data){ 
-					result = { status: 'Error::', name: m[i].name, query: m[i].up, data: data };
-					
-					params.error(result); 
-				} 
+						params.success(result);
+					}, 
+					error: function(data){ 
+						result = { status: 'Error::', name: m[i].name, query: m[i].up, data: data };
+						
+						params.error(result); 
+					} 
+				});
 			});
+			
 		});
 	},
 	rollback: function (params) {

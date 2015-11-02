@@ -10,7 +10,7 @@ var rfFunction = {
 		if(schema) {
 			console.log(params.table + ' : ');
 
-			var column = rfFunc.sort({ array: schema.column, key: 'order' });
+			var column = rfFunction.sort({ array: schema.column, key: 'order' });
 
 			return column;
 		} else {
@@ -34,6 +34,24 @@ var rfFunction = {
 			break;
 			case 'password':
 				return 'password';
+			break;
+			case 'number':
+				return faker.random.number();
+			break;
+			case 'float':
+				return faker.finance.amount();
+			break;
+			case 'url':
+				return faker.internet.url();
+			break;
+			case 'text':
+				return faker.lorem.paragraphs();
+			break;
+			case 'date':
+				return faker.date.past();
+			break;
+			case 'time':
+				return '00:00:00';
 			break;
 		}
 	},

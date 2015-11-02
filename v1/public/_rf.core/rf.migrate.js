@@ -1,15 +1,202 @@
-var rfMigration = [
-	{ 
-		id: 0, 
-		name: 'drop_table_user', 
-		up: 'DROP TABLE users',
-		down: 'CREATE TABLE IF NOT EXISTS users (' +
-            'email TEXT,' +
-            'password TEXT,' +
-            'fullname TEXT' +
-        ')',
-		value: []
+var rfMigrate = [
+	{
+		id: 0,
+		up: ['DROP TABLE rf_input_types'],
 	}, {
+		id: 1,
+		table: 'rf_input_types',
+		name: 'create_table_rf_input_types',
+		created_at: '2015-11-03 01:58:34',
+		method: 'createTable',
+		column: [
+			{ type: 'auto_id' },
+			{ type: 'created_at' },
+			{ type: 'modified_at' }
+		],
+		up: [
+		'CREATE TABLE IF NOT EXISTS rf_input_types (' +
+            'id INTEGER PRIMARY KEY,' +
+            'created_at DATETIME,' +
+            'modified_at DATETIME' +
+        ')' 
+		],
+		down: 'DROP TABLE rf_input_types',
+	}, {
+		id: 2,
+		table: 'rf_input_types',
+		created_at: '2015-11-03 01:58:34',
+		name: 'create_column_into_rf_input_types',
+		method: 'createColumn',
+		column: [
+			{ type: 'string', name: 'string', 
+				params: {
+					label: 'String',
+					placeholder: 'put a string here..',
+					default: 'string',
+					validation: {
+						required: true,
+						before: '$',
+						after: false,
+						mask: '',
+						min: 3,
+						max: 10
+					}
+				}
+			},
+			{ type: 'number', name: 'number', 
+				params: {
+					label: 'Number',
+					placeholder: '(+63) 000-000-0000',
+					default: '',
+					validation: {
+						mask: '(+99) 999-999-9999',
+						min: 100,
+						max: 200
+					}
+				}
+			},
+			{ type: 'float', name: 'float',
+				params: {
+					label: 'Float',
+					placeholder: '000.00',
+					default: '',
+					validation: {
+						mask: '999.99',
+						min: 0.00,
+						max: 0.00
+					}
+				}
+			},
+			{ type: 'email', name: 'email',
+				params: {
+					label: 'E-Mail',
+					placeholder: 'mail@host.com',
+					default: '',
+					validation: {
+						blacklist: ['@yopmail.com', '@host.com'],
+						unique: true
+					}
+				}
+			},
+			{ type: 'url', name: 'url',
+				params: {
+					label: 'URL',
+					placeholder: 'http://www.yourwebsite.com',
+					default: '',
+					validation: {
+						mask: 'http://www.???.com'
+					}
+				} 
+			},
+			{ type: 'password', name: 'password',
+				params: {
+					label: 'Password',
+					placeholder: '*****',
+					default: '',
+					validation: {
+						retype: true,
+						strength: 'Very Strong'
+					}
+				}
+			},
+			{ type: 'text', name: 'text',
+				params: {
+					label: 'Text',
+					placeholder: 'Short Bio',
+					default: '',
+					validation: {
+						minphar: 0,
+						maxphar: 3
+					}
+				}
+			},
+			{ type: 'date' },
+			{ type: 'time' },
+			{ type: 'file', name: 'file', 
+				params: {
+					label: 'File',
+					default: '',
+					validation: {
+						minsize: 0,
+						maxsize: 10000,
+						ext: ['.psd','.doc'],
+						loc: 'uploads/files'
+					}
+				}
+			},
+			{ type: 'radio', 
+				params: {
+					options: ['on', 'off']
+				}
+			},
+			{ type: 'checkbox', 
+				params: {
+					options: ['value1', 'value2']
+				} 
+			},
+			{ type: 'select', 
+				params: { 
+					multiple: false, 
+					values: [1, 0], 
+					options: ['active', 'inactive']
+				} 
+			},
+			{ type: 'query', 
+				params: { 
+					query: rfQuery.function, 
+					multiple: false, 
+					values: "id", 
+					options: "column" 
+				} 
+			},
+			{ type: 'session', 
+				params: { 
+					query: rfQuery.icons, 
+					multiple: false, 
+					values: "id", 
+					options: "icon" 
+				} 
+			}
+		],
+		up: [
+			'ALTER TABLE rf_input_types ADD string VARCHAR(100)',
+			'ALTER TABLE rf_input_types ADD number INTEGER',
+			'ALTER TABLE rf_input_types ADD float DECIMAL(10, 5)',
+			'ALTER TABLE rf_input_types ADD email VARCHAR(150)',
+			'ALTER TABLE rf_input_types ADD url VARCHAR(200)',
+			'ALTER TABLE rf_input_types ADD password VARCHAR(250)',
+			'ALTER TABLE rf_input_types ADD text TEXT',
+			'ALTER TABLE rf_input_types ADD date DATE',
+			'ALTER TABLE rf_input_types ADD time TIME',
+			'ALTER TABLE rf_input_types ADD file BLOB',
+			'ALTER TABLE rf_input_types ADD radio TEXT',
+			'ALTER TABLE rf_input_types ADD checkbox TEXT',
+			'ALTER TABLE rf_input_types ADD selected TEXT',
+			'ALTER TABLE rf_input_types ADD query TEXT',
+			'ALTER TABLE rf_input_types ADD session TEXT'
+		],
+		down: 'ALTER TABLE rf_input_types DROP ' +
+			'string,' +
+			'number,' +
+			'float,' +
+			'email,' +
+			'url,' +
+			'password,' +
+			'text,' +
+			'date,' +
+			'time,' +
+			'file,' +
+			'radio,' +
+			'checkbox,' +
+			'select,' +
+			'query,' +
+			'session',
+		values: []
+	}
+]
+
+var rfMigration = [
+	{
 		id: 1, 
 		name: 'create_table_user', 
 		up: 'CREATE TABLE IF NOT EXISTS users (' +
@@ -78,6 +265,148 @@ var rfSchema = {
 				}
 			}
 		]
+	},
+	rf_input_types : {
+		id: 2,
+		table: 'rf_input_types',
+		created_at: '2015-11-03 01:58:34',
+		name: 'create_column_into_rf_input_types',
+		method: 'createColumn',
+		column: [
+			{ type: 'string', name: 'string', seed: 'string', order: 1,
+				params: {
+					label: 'String',
+					placeholder: 'put a string here..',
+					default: 'string',
+					validation: {
+						required: true,
+						before: '$',
+						after: false,
+						mask: '',
+						min: 3,
+						max: 10
+					}
+				}
+			},
+			{ type: 'number', name: 'number', seed: 'number', order: 2,
+				params: {
+					label: 'Number',
+					placeholder: '(+63) 000-000-0000',
+					default: '',
+					validation: {
+						mask: '(+99) 999-999-9999',
+						min: 100,
+						max: 200
+					}
+				}
+			},
+			{ type: 'float', name: 'float', seed: 'float', order: 3,
+				params: {
+					label: 'Float',
+					placeholder: '000.00',
+					default: '',
+					validation: {
+						mask: '999.99',
+						min: 0.00,
+						max: 0.00
+					}
+				}
+			},
+			{ type: 'email', name: 'email', seed: 'email', order: 4,
+				params: {
+					label: 'E-Mail',
+					placeholder: 'mail@host.com',
+					default: '',
+					validation: {
+						blacklist: ['@yopmail.com', '@host.com'],
+						unique: true
+					}
+				}
+			},
+			{ type: 'url', name: 'url', seed: 'url', order: 5,
+				params: {
+					label: 'URL',
+					placeholder: 'http://www.yourwebsite.com',
+					default: '',
+					validation: {
+						mask: 'http://www.???.com'
+					}
+				} 
+			},
+			{ type: 'password', name: 'password', seed: 'password', order: 6,
+				params: {
+					label: 'Password',
+					placeholder: '*****',
+					default: '',
+					validation: {
+						retype: true,
+						strength: 'Very Strong'
+					}
+				}
+			},
+			{ type: 'text', name: 'text', seed: 'text', order: 7,
+				params: {
+					label: 'Text',
+					placeholder: 'Short Bio',
+					default: '',
+					validation: {
+						minphar: 0,
+						maxphar: 3
+					}
+				}
+			},
+			{ type: 'date', name: 'date', seed: 'date', order: 8, 
+				params: {}
+			},
+			{ type: 'time', name: 'time', seed: 'time', order: 9, 
+				params: {}
+			},
+			{ type: 'file', name: 'file', seed: 'file', order: 10,
+				params: {
+					label: 'File',
+					default: '',
+					validation: {
+						minsize: 0,
+						maxsize: 10000,
+						ext: ['.psd','.doc'],
+						loc: 'uploads/files'
+					}
+				}
+			},
+			{ type: 'radio', name: 'radio', seed: 'radio', order: 11,
+				params: {
+					options: ['on', 'off']
+				}
+			},
+			{ type: 'checkbox', name: 'checkbox', seed: 'checkbox', order: 12,
+				params: {
+					options: ['value1', 'value2']
+				} 
+			},
+			{ type: 'select', name: 'selected', seed: 'select', order: 13,
+				params: { 
+					multiple: false, 
+					values: [1, 0], 
+					options: ['active', 'inactive']
+				} 
+			},
+			{ type: 'query', name: 'query', seed: 'query', order: 14,
+				params: { 
+					query: rfQuery.function, 
+					multiple: false, 
+					values: "id", 
+					options: "column" 
+				} 
+			},
+			{ type: 'session', name: 'session', seed: 'session', order: 15,
+				params: { 
+					query: rfQuery.icons, 
+					multiple: false, 
+					values: "id", 
+					options: "icon" 
+				} 
+			}
+		],
 	}
 }
 
