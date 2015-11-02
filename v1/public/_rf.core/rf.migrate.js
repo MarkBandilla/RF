@@ -273,6 +273,12 @@ var rfSchema = {
 		name: 'create_column_into_rf_input_types',
 		method: 'createColumn',
 		column: [
+			{ type: 'datetime_now', name: 'created_at', seed: 'datetime_now', order: 0,
+				params: {}
+			},
+			{ type: 'datetime_now', name: 'modified_at', seed: 'datetime_now', order: 0,
+				params: {}
+			},
 			{ type: 'string', name: 'string', seed: 'string', order: 1,
 				params: {
 					label: 'String',
@@ -361,7 +367,7 @@ var rfSchema = {
 			{ type: 'time', name: 'time', seed: 'time', order: 9, 
 				params: {}
 			},
-			{ type: 'file', name: 'file', seed: 'file', order: 10,
+			{ type: 'file', name: 'file', seed: 'image', order: 10,
 				params: {
 					label: 'File',
 					default: '',

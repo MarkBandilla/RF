@@ -48,10 +48,25 @@ var rfFunction = {
 				return faker.lorem.paragraphs();
 			break;
 			case 'date':
-				return faker.date.past();
+				return moment(faker.date.past()).format('YYYY-MM-DD');
+			break;
+			case 'date_now':
+				return moment().format('YYYY-MM-DD');
 			break;
 			case 'time':
-				return '00:00:00';
+				return moment(faker.date.past()).format('hh:mm:ss');
+			break;
+			case 'time_now':
+				return moment().format('hh:mm:ss');
+			break;
+			case 'datetime':
+				return moment(faker.date.past()).format('YYYY-MM-DD hh:mm:ss');
+			break;
+			case 'datetime_now':
+				return moment().format('YYYY-MM-DD hh:mm:ss');
+			break;
+			case 'image':
+				return faker.internet.avatar();
 			break;
 		}
 	},
