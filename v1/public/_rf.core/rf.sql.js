@@ -6,7 +6,7 @@ var rfSQL = {
 		var params = $.extend({
 			dbname: 'db',
 			version: '1.0',
-			description: 'description'
+			description: 'no description'
 		}, params);
 
 		var odb = window.openDatabase;
@@ -59,31 +59,29 @@ var rfSQL = {
 		var e = [];
 
 		$.each(m, function(i) {
-			$.each(m[i].up, function(j){
-				rfSQL.exec({ 
-					query: m[i].up[j], 
-					values: m[i].values, 
-					success: function(data){
-						result = { status: 'Success::', name: m[i].name, query: m[i].up, data: data };
-						rfSQL.lm = m[i].id;
+			if(rfSQL.lm <= i) {
+				rfFunction.migrate2Schema({ table: m[i].table, method: m[i].method, column: m[i].column });
+				rfFunction.migrate2SQL({ table: m[i].table, method: m[i].method, column: m[i].column });
 
-						params.success(result);
-					}, 
-					error: function(data){ 
-						result = { status: 'Error::', name: m[i].name, query: m[i].up, data: data };
-						
-						params.error(result); 
-					} 
+				$.each(m[i].up, function(j){
+					rfSQL.exec({ 
+						query: m[i].up[j], 
+						values: m[i].values, 
+						success: function(data){
+							result = { status: 'Success::', name: m[i].name, query: m[i].up[j], data: data };
+							rfSQL.lm = m[i].id;
+
+							params.success(result);
+						}, 
+						error: function(data){ 
+							result = { status: 'Error::', name: m[i].name, query: m[i].up, data: data };
+							
+							params.error(result); 
+						} 
+					});
 				});
-			});
-			
+			}
 		});
-	},
-	migrateSchema: function (params) {
-
-	},
-	migrateSQL: function (params) {
-
 	},
 	rollback: function (params) {
 

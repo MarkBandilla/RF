@@ -1,6 +1,9 @@
 var rfMigrate = [
 	{
 		id: 0,
+		table: '',
+		name: 'database_reset',
+		method: 'resetDataBase',
 		up: ['DROP TABLE rf_input_types'],
 	}, {
 		id: 1,
@@ -9,9 +12,9 @@ var rfMigrate = [
 		created_at: '2015-11-03 01:58:34',
 		method: 'createTable',
 		column: [
-			{ type: 'auto_id' },
-			{ type: 'created_at' },
-			{ type: 'modified_at' }
+			{ type: 'auto_id', name: 'id', order: 0 },
+			{ type: 'datetime_now', name: 'created_at', seed: 'datetime_now', order: 0 },
+			{ type: 'datetime_now', name: 'modified_at', seed: 'datetime_now', order: 0 }
 		],
 		up: [
 		'CREATE TABLE IF NOT EXISTS rf_input_types (' +
@@ -28,7 +31,7 @@ var rfMigrate = [
 		name: 'create_column_into_rf_input_types',
 		method: 'createColumn',
 		column: [
-			{ type: 'string', name: 'string', 
+			{ type: 'string', name: 'string', seed: 'string', order: 1,
 				params: {
 					label: 'String',
 					placeholder: 'put a string here..',
@@ -43,7 +46,7 @@ var rfMigrate = [
 					}
 				}
 			},
-			{ type: 'number', name: 'number', 
+			{ type: 'number', name: 'number', seed: 'number', order: 2,
 				params: {
 					label: 'Number',
 					placeholder: '(+63) 000-000-0000',
@@ -55,7 +58,7 @@ var rfMigrate = [
 					}
 				}
 			},
-			{ type: 'float', name: 'float',
+			{ type: 'float', name: 'float', seed: 'float', order: 3,
 				params: {
 					label: 'Float',
 					placeholder: '000.00',
@@ -67,7 +70,7 @@ var rfMigrate = [
 					}
 				}
 			},
-			{ type: 'email', name: 'email',
+			{ type: 'email', name: 'email', seed: 'email', order: 4,
 				params: {
 					label: 'E-Mail',
 					placeholder: 'mail@host.com',
@@ -78,7 +81,7 @@ var rfMigrate = [
 					}
 				}
 			},
-			{ type: 'url', name: 'url',
+			{ type: 'url', name: 'url', seed: 'url', order: 5,
 				params: {
 					label: 'URL',
 					placeholder: 'http://www.yourwebsite.com',
@@ -88,7 +91,7 @@ var rfMigrate = [
 					}
 				} 
 			},
-			{ type: 'password', name: 'password',
+			{ type: 'password', name: 'password', seed: 'password', order: 6,
 				params: {
 					label: 'Password',
 					placeholder: '*****',
@@ -99,7 +102,7 @@ var rfMigrate = [
 					}
 				}
 			},
-			{ type: 'text', name: 'text',
+			{ type: 'text', name: 'text', seed: 'text', order: 7,
 				params: {
 					label: 'Text',
 					placeholder: 'Short Bio',
@@ -110,9 +113,13 @@ var rfMigrate = [
 					}
 				}
 			},
-			{ type: 'date' },
-			{ type: 'time' },
-			{ type: 'file', name: 'file', 
+			{ type: 'date', name: 'date', seed: 'date', order: 8, 
+				params: {}
+			},
+			{ type: 'time', name: 'time', seed: 'time', order: 9, 
+				params: {}
+			},
+			{ type: 'file', name: 'file', seed: 'image', order: 10,
 				params: {
 					label: 'File',
 					default: '',
@@ -124,24 +131,24 @@ var rfMigrate = [
 					}
 				}
 			},
-			{ type: 'radio', 
+			{ type: 'radio', name: 'radio', seed: 'select', order: 11,
 				params: {
 					options: ['on', 'off']
 				}
 			},
-			{ type: 'checkbox', 
+			{ type: 'checkbox', name: 'checkbox', seed: 'select', order: 12,
 				params: {
-					options: ['option1', 'option2']
+					options: ['value1', 'value2']
 				} 
 			},
-			{ type: 'select', 
+			{ type: 'select', name: 'selected', seed: 'select', order: 13,
 				params: { 
 					multiple: false, 
 					values: [1, 0], 
 					options: ['active', 'inactive']
 				} 
 			},
-			{ type: 'query', 
+			{ type: 'query', name: 'query', seed: 'query', order: 14,
 				params: { 
 					query: rfQuery.function, 
 					multiple: false, 
@@ -149,7 +156,7 @@ var rfMigrate = [
 					options: "column" 
 				} 
 			},
-			{ type: 'session', 
+			{ type: 'session', name: 'session', seed: 'session', order: 15,
 				params: { 
 					query: rfQuery.icons, 
 					multiple: false, 
@@ -175,22 +182,23 @@ var rfMigrate = [
 			'ALTER TABLE rf_input_types ADD query TEXT',
 			'ALTER TABLE rf_input_types ADD session TEXT'
 		],
-		down: 'ALTER TABLE rf_input_types DROP ' +
-			'string,' +
-			'number,' +
-			'float,' +
-			'email,' +
-			'url,' +
-			'password,' +
-			'text,' +
-			'date,' +
-			'time,' +
-			'file,' +
-			'radio,' +
-			'checkbox,' +
-			'select,' +
-			'query,' +
-			'session',
+		down: [
+			'ALTER TABLE rf_input_types DROP string',
+			'ALTER TABLE rf_input_types DROP number',
+			'ALTER TABLE rf_input_types DROP float',
+			'ALTER TABLE rf_input_types DROP email',
+			'ALTER TABLE rf_input_types DROP url',
+			'ALTER TABLE rf_input_types DROP password',
+			'ALTER TABLE rf_input_types DROP text',
+			'ALTER TABLE rf_input_types DROP date',
+			'ALTER TABLE rf_input_types DROP time',
+			'ALTER TABLE rf_input_types DROP file',
+			'ALTER TABLE rf_input_types DROP radio',
+			'ALTER TABLE rf_input_types DROP checkbox',
+			'ALTER TABLE rf_input_types DROP select',
+			'ALTER TABLE rf_input_types DROP query',
+			'ALTER TABLE rf_input_types DROP session',
+		],
 		values: []
 	}
 ]

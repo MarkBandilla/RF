@@ -1,4 +1,26 @@
 var rfFunction = {
+	migrate2Schema: function (params) {
+		var params = $.extend({
+			table: '',
+			method: '',
+			column: [],
+			success: function (data) { console.log (data, 'migrateSchema:: ' + params.table); },
+			error: function (data) { console.log (data); }
+		}, params);
+
+		console.log('migrateSchema:: ', params);
+	},
+	migrate2SQL: function (params) {
+		var params = $.extend({
+			table: '',
+			method: '',
+			column: [],
+			success: function (data) { console.log (data, 'migrateSchema:: ' + params.table); },
+			error: function (data) { console.log (data); }
+		}, params);
+
+		console.log('migrateSQL:: ', params);
+	},
 	schema: function (params) {
 		var params = $.extend({
 			table: 'users'
@@ -37,7 +59,12 @@ var rfFunction = {
 				return 'password';
 			break;
 			case 'number':
-				return faker.random.number();
+				var min = params.params.validation.min || 0;
+				var max = params.params.validation.max || 0;
+				if(min < max)
+					return Math.floor(Math.random() * (max - min + 1)) + min;
+				else
+					return faker.random.number();
 			break;
 			case 'float':
 				return faker.finance.amount();
