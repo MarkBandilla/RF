@@ -19,7 +19,8 @@ var rfFunction = {
 	},
 	faker: function (params) {
 		var params = $.extend({
-			type: 'string'
+			type: 'string',
+			params: null
 		}, params);
 
 		switch(params.type) {
@@ -67,6 +68,14 @@ var rfFunction = {
 			break;
 			case 'image':
 				return faker.internet.avatar();
+			break;
+			case 'select':
+				var values = [];
+				if(params.params.values) values = params.params.values;
+				else if(params.params.options) values = params.params.options;
+				else return null;
+
+				return values[Math.floor(Math.random()*values.length)];
 			break;
 		}
 	},

@@ -79,6 +79,12 @@ var rfSQL = {
 			
 		});
 	},
+	migrateSchema: function (params) {
+
+	},
+	migrateSQL: function (params) {
+
+	},
 	rollback: function (params) {
 
 	},
@@ -95,10 +101,12 @@ var rfSQL = {
 		if(schema) {
 			var column_names = [];
 			var column_types = [];
+			var column_params = [];
 
 			$.each(schema, function (c, v) {
 				column_names.push( v.name );
 				column_types.push( v.seed );
+				column_params.push( v.params );
 			});
 			for( var i = 0; i < params.rows; i ++ ) {
 				// console.log('Seed:: ' + i);
@@ -107,7 +115,7 @@ var rfSQL = {
 				var column_values = [];
 
 				for( var j = 0; j < column_names.length; j ++ ) {
-					var faker = rfFunction.faker({ type: column_types[j] });
+					var faker = rfFunction.faker({ type: column_types[j], params: column_params[j] });
 
 					column_values.push(faker);
 					column_count.push('?');

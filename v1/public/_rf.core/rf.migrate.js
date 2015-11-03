@@ -131,7 +131,7 @@ var rfMigrate = [
 			},
 			{ type: 'checkbox', 
 				params: {
-					options: ['value1', 'value2']
+					options: ['option1', 'option2']
 				} 
 			},
 			{ type: 'select', 
@@ -379,12 +379,12 @@ var rfSchema = {
 					}
 				}
 			},
-			{ type: 'radio', name: 'radio', seed: 'radio', order: 11,
+			{ type: 'radio', name: 'radio', seed: 'select', order: 11,
 				params: {
 					options: ['on', 'off']
 				}
 			},
-			{ type: 'checkbox', name: 'checkbox', seed: 'checkbox', order: 12,
+			{ type: 'checkbox', name: 'checkbox', seed: 'select', order: 12,
 				params: {
 					options: ['value1', 'value2']
 				} 
