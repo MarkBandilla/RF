@@ -21,7 +21,9 @@ var rfFunction = {
 
 		switch(params.method) {
 			case 'resetDataBase':
-				
+				$.each(rfSchema, function(i, value){ 
+					rfSQL.exec({query: 'DROP TABLE ' + i}); 
+				});
 			break;
 			case 'createTable':
 				rfSchema[params.table] = { column: params.column };
