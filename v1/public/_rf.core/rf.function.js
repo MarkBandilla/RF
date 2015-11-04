@@ -15,11 +15,14 @@ var rfFunction = {
 			table: '',
 			method: '',
 			column: [],
-			success: function (data) { console.log (data, 'migrateSchema:: ' + params.table); },
+			success: function (data) { console.log (data, 'migrate2Schema:: ' + params.table); },
 			error: function (data) { console.log (data); }
 		}, params);
 
 		switch(params.method) {
+			case 'resetDataBase':
+				
+			break;
 			case 'createTable':
 				rfSchema[params.table] = { column: params.column };
 			break;
@@ -33,14 +36,23 @@ var rfFunction = {
 	},
 	migrate2SQL: function (params) {
 		var params = $.extend({
+			name: '',
 			table: '',
 			method: '',
-			column: [],
-			success: function (data) { console.log (data, 'migrateSchema:: ' + params.table); },
+			up: '',
+			down: '',
+			success: function (data) { console.log (data, 'migrate2SQL:: ' + params.table); },
 			error: function (data) { console.log (data); }
 		}, params);
 
-		console.log('migrateSQL:: ', params);
+		rfMigration.push({
+			id: rfMigration.length,
+			name: params.name,
+			table: params.table,
+			method: params.method,
+			up: params.up,
+			down: params.down
+		});
 	},
 	schema: function (params) {
 		var params = $.extend({
@@ -85,6 +97,9 @@ var rfFunction = {
 			break;
 			case 'float':
 				return faker.finance.amount();
+			break;
+			case 'avatar':
+				return faker.image.avatar();
 			break;
 			case 'url':
 				return faker.internet.url();
