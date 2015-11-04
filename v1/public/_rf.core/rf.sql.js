@@ -2,6 +2,10 @@ var rfSQL = {
 	db: null,
 	lm: 0,
 
+	init: function () {
+		rfSQL.connect();
+		rfSQL.migrate();
+	},
 	connect: function (params) {
 		var params = $.extend({
 			dbname: rfFunction.urlvars()['rfproject'] || null,
