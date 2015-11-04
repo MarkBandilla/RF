@@ -10,6 +10,7 @@ var rfMigrate = [
 		table: 'rf_input_types',
 		name: 'create_table_rf_input_types',
 		created_at: '2015-11-03 01:58:34',
+		updated_at: '2015-11-03 01:58:34',
 		method: 'createTable',
 		column: [
 			{ type: 'auto_id', name: 'id', order: 0 },
@@ -28,6 +29,7 @@ var rfMigrate = [
 		id: 2,
 		table: 'rf_input_types',
 		created_at: '2015-11-03 01:58:34',
+		updated_at: '2015-11-03 01:58:34',
 		name: 'create_column_into_rf_input_types',
 		method: 'createColumn',
 		column: [
@@ -141,7 +143,7 @@ var rfMigrate = [
 					options: ['value1', 'value2']
 				} 
 			},
-			{ type: 'select', name: 'selected', seed: 'select', order: 13,
+			{ type: 'number', name: 'selected', seed: 'select', order: 13,
 				params: { 
 					multiple: false, 
 					values: [1, 0], 
@@ -229,200 +231,200 @@ var rfMigration = [
 	},
 ];
 
-var rfSchema = {	
-	users : {
-		id: 1,
-		table: 'users',
-		method: 'createColumn',
-		column: [
-			{ type: 'string', name: 'fullname', seed: 'fullname',  order: 3,
-				params: {
-					label: 'Fullname',
-					placeholder: 'FirstName M.I. SurName',
-					default: 'string',
-					validation: {
-						required: true,
-						before: '#',
-						after: false,
-						mask: '',
-						min: 3,
-						max: 100
-					}
-				}
-			},
-			{ type: 'email', name: 'email', seed: 'email', order: 1,
-				params: {
-					label: 'E-Mail',
-					placeholder: 'mail@host.com',
-					default: '',
-					validation: {
-						blacklist: ['@yopmail.com', '@host.com'],
-						unique: true
-					}
-				}
-			},
-			{ type: 'password', name: 'password', seed: 'password', order: 2,
-				params: {
-					label: 'Password',
-					placeholder: '*****',
-					default: '',
-					validation: {
-						retype: true,
-						strength: 'Very Strong'
-					}
-				}
-			}
-		]
-	},
-	rf_input_types : {
-		id: 2,
-		table: 'rf_input_types',
-		created_at: '2015-11-03 01:58:34',
-		name: 'create_column_into_rf_input_types',
-		method: 'createColumn',
-		column: [
-			{ type: 'datetime_now', name: 'created_at', seed: 'datetime_now', order: 0,
-				params: {}
-			},
-			{ type: 'datetime_now', name: 'modified_at', seed: 'datetime_now', order: 0,
-				params: {}
-			},
-			{ type: 'string', name: 'string', seed: 'string', order: 1,
-				params: {
-					label: 'String',
-					placeholder: 'put a string here..',
-					default: 'string',
-					validation: {
-						required: true,
-						before: '$',
-						after: false,
-						mask: '',
-						min: 3,
-						max: 10
-					}
-				}
-			},
-			{ type: 'number', name: 'number', seed: 'number', order: 2,
-				params: {
-					label: 'Number',
-					placeholder: '(+63) 000-000-0000',
-					default: '',
-					validation: {
-						mask: '(+99) 999-999-9999',
-						min: 100,
-						max: 200
-					}
-				}
-			},
-			{ type: 'float', name: 'float', seed: 'float', order: 3,
-				params: {
-					label: 'Float',
-					placeholder: '000.00',
-					default: '',
-					validation: {
-						mask: '999.99',
-						min: 0.00,
-						max: 0.00
-					}
-				}
-			},
-			{ type: 'email', name: 'email', seed: 'email', order: 4,
-				params: {
-					label: 'E-Mail',
-					placeholder: 'mail@host.com',
-					default: '',
-					validation: {
-						blacklist: ['@yopmail.com', '@host.com'],
-						unique: true
-					}
-				}
-			},
-			{ type: 'url', name: 'url', seed: 'url', order: 5,
-				params: {
-					label: 'URL',
-					placeholder: 'http://www.yourwebsite.com',
-					default: '',
-					validation: {
-						mask: 'http://www.???.com'
-					}
-				} 
-			},
-			{ type: 'password', name: 'password', seed: 'password', order: 6,
-				params: {
-					label: 'Password',
-					placeholder: '*****',
-					default: '',
-					validation: {
-						retype: true,
-						strength: 'Very Strong'
-					}
-				}
-			},
-			{ type: 'text', name: 'text', seed: 'text', order: 7,
-				params: {
-					label: 'Text',
-					placeholder: 'Short Bio',
-					default: '',
-					validation: {
-						minphar: 0,
-						maxphar: 3
-					}
-				}
-			},
-			{ type: 'date', name: 'date', seed: 'date', order: 8, 
-				params: {}
-			},
-			{ type: 'time', name: 'time', seed: 'time', order: 9, 
-				params: {}
-			},
-			{ type: 'file', name: 'file', seed: 'image', order: 10,
-				params: {
-					label: 'File',
-					default: '',
-					validation: {
-						minsize: 0,
-						maxsize: 10000,
-						ext: ['.psd','.doc'],
-						loc: 'uploads/files'
-					}
-				}
-			},
-			{ type: 'radio', name: 'radio', seed: 'select', order: 11,
-				params: {
-					options: ['on', 'off']
-				}
-			},
-			{ type: 'checkbox', name: 'checkbox', seed: 'select', order: 12,
-				params: {
-					options: ['value1', 'value2']
-				} 
-			},
-			{ type: 'select', name: 'selected', seed: 'select', order: 13,
-				params: { 
-					multiple: false, 
-					values: [1, 0], 
-					options: ['active', 'inactive']
-				} 
-			},
-			{ type: 'query', name: 'query', seed: 'query', order: 14,
-				params: { 
-					query: rfQuery.function, 
-					multiple: false, 
-					values: "id", 
-					options: "column" 
-				} 
-			},
-			{ type: 'session', name: 'session', seed: 'session', order: 15,
-				params: { 
-					query: rfQuery.icons, 
-					multiple: false, 
-					values: "id", 
-					options: "icon" 
-				} 
-			}
-		],
-	}
-}
+
+var rfSchema = {};
+
+
+// var rfSchema = {	
+// 	users : {
+// 		id: 1,
+// 		table: 'users',
+// 		method: 'createColumn',
+// 		column: [
+// 			{ type: 'string', name: 'fullname', seed: 'fullname',  order: 3,
+// 				params: {
+// 					label: 'Fullname',
+// 					placeholder: 'FirstName M.I. SurName',
+// 					default: 'string',
+// 					validation: {
+// 						required: true,
+// 						before: '#',
+// 						after: false,
+// 						mask: '',
+// 						min: 3,
+// 						max: 100
+// 					}
+// 				}
+// 			},
+// 			{ type: 'email', name: 'email', seed: 'email', order: 1,
+// 				params: {
+// 					label: 'E-Mail',
+// 					placeholder: 'mail@host.com',
+// 					default: '',
+// 					validation: {
+// 						blacklist: ['@yopmail.com', '@host.com'],
+// 						unique: true
+// 					}
+// 				}
+// 			},
+// 			{ type: 'password', name: 'password', seed: 'password', order: 2,
+// 				params: {
+// 					label: 'Password',
+// 					placeholder: '*****',
+// 					default: '',
+// 					validation: {
+// 						retype: true,
+// 						strength: 'Very Strong'
+// 					}
+// 				}
+// 			}
+// 		]
+// 	},
+// 	rf_input_types : {
+// 		id: 2,
+// 		table: 'rf_input_types',
+// 		created_at: '2015-11-03 01:58:34',
+// 		name: 'create_column_into_rf_input_types',
+// 		method: 'createColumn',
+// 		column: [
+// 			{ type: 'datetime_now', name: 'created_at', seed: 'datetime_now', order: 0 },
+// 			{ type: 'datetime_now', name: 'modified_at', seed: 'datetime_now', order: 0 },
+// 			{ type: 'string', name: 'string', seed: 'string', order: 1,
+// 				params: {
+// 					label: 'String',
+// 					placeholder: 'put a string here..',
+// 					default: 'string',
+// 					validation: {
+// 						required: true,
+// 						before: '$',
+// 						after: false,
+// 						mask: '',
+// 						min: 3,
+// 						max: 10
+// 					}
+// 				}
+// 			},
+// 			{ type: 'number', name: 'number', seed: 'number', order: 2,
+// 				params: {
+// 					label: 'Number',
+// 					placeholder: '(+63) 000-000-0000',
+// 					default: '',
+// 					validation: {
+// 						mask: '(+99) 999-999-9999',
+// 						min: 100,
+// 						max: 200
+// 					}
+// 				}
+// 			},
+// 			{ type: 'float', name: 'float', seed: 'float', order: 3,
+// 				params: {
+// 					label: 'Float',
+// 					placeholder: '000.00',
+// 					default: '',
+// 					validation: {
+// 						mask: '999.99',
+// 						min: 0.00,
+// 						max: 0.00
+// 					}
+// 				}
+// 			},
+// 			{ type: 'email', name: 'email', seed: 'email', order: 4,
+// 				params: {
+// 					label: 'E-Mail',
+// 					placeholder: 'mail@host.com',
+// 					default: '',
+// 					validation: {
+// 						blacklist: ['@yopmail.com', '@host.com'],
+// 						unique: true
+// 					}
+// 				}
+// 			},
+// 			{ type: 'url', name: 'url', seed: 'url', order: 5,
+// 				params: {
+// 					label: 'URL',
+// 					placeholder: 'http://www.yourwebsite.com',
+// 					default: '',
+// 					validation: {
+// 						mask: 'http://www.???.com'
+// 					}
+// 				} 
+// 			},
+// 			{ type: 'password', name: 'password', seed: 'password', order: 6,
+// 				params: {
+// 					label: 'Password',
+// 					placeholder: '*****',
+// 					default: '',
+// 					validation: {
+// 						retype: true,
+// 						strength: 'Very Strong'
+// 					}
+// 				}
+// 			},
+// 			{ type: 'text', name: 'text', seed: 'text', order: 7,
+// 				params: {
+// 					label: 'Text',
+// 					placeholder: 'Short Bio',
+// 					default: '',
+// 					validation: {
+// 						minphar: 0,
+// 						maxphar: 3
+// 					}
+// 				}
+// 			},
+// 			{ type: 'date', name: 'date', seed: 'date', order: 8, 
+// 				params: {}
+// 			},
+// 			{ type: 'time', name: 'time', seed: 'time', order: 9, 
+// 				params: {}
+// 			},
+// 			{ type: 'file', name: 'file', seed: 'image', order: 10,
+// 				params: {
+// 					label: 'File',
+// 					default: '',
+// 					validation: {
+// 						minsize: 0,
+// 						maxsize: 10000,
+// 						ext: ['.psd','.doc'],
+// 						loc: 'uploads/files'
+// 					}
+// 				}
+// 			},
+// 			{ type: 'radio', name: 'radio', seed: 'select', order: 11,
+// 				params: {
+// 					options: ['on', 'off']
+// 				}
+// 			},
+// 			{ type: 'checkbox', name: 'checkbox', seed: 'select', order: 12,
+// 				params: {
+// 					options: ['value1', 'value2']
+// 				} 
+// 			},
+// 			{ type: 'select', name: 'selected', seed: 'select', order: 13,
+// 				params: { 
+// 					multiple: false, 
+// 					values: [1, 0], 
+// 					options: ['active', 'inactive']
+// 				} 
+// 			},
+// 			{ type: 'query', name: 'query', seed: 'query', order: 14,
+// 				params: { 
+// 					query: rfQuery.function, 
+// 					multiple: false, 
+// 					values: "id", 
+// 					options: "column" 
+// 				} 
+// 			},
+// 			{ type: 'session', name: 'session', seed: 'session', order: 15,
+// 				params: { 
+// 					query: rfQuery.icons, 
+// 					multiple: false, 
+// 					values: "id", 
+// 					options: "icon" 
+// 				} 
+// 			}
+// 		],
+// 	}
+// }
 
 
 var rfInput = [

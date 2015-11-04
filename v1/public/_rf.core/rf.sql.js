@@ -4,7 +4,7 @@ var rfSQL = {
 
 	connect: function (params) {
 		var params = $.extend({
-			dbname: 'db',
+			dbname: rfFunction.urlvars()['rfproject'] || null,
 			version: '1.0',
 			description: 'no description'
 		}, params);
@@ -14,6 +14,9 @@ var rfSQL = {
 	    if(!odb) {
 	        return 'Web SQL Not Supported';
 	    } else {
+
+	    	if(params.dbname === null) return 'Project Undefined';
+
 	        this.db = odb( params.dbname, params.version, params.description, 10 * 1024 * 1024 );
 	        return 'DB::' + params.dbname + ' was created!';
 	    }
@@ -94,7 +97,7 @@ var rfSQL = {
 			error: function (data) { console.log (data); }
 		}, params);
 
-		var schema = rfFunction.schema({ table: params.table });
+		var schema = rfFunction.schema({ table: params.table }).column;
 
 		if(schema) {
 			var column_names = [];
@@ -102,9 +105,11 @@ var rfSQL = {
 			var column_params = [];
 
 			$.each(schema, function (c, v) {
-				column_names.push( v.name );
-				column_types.push( v.seed );
-				column_params.push( v.params );
+				if(v.name != 'id') {
+					column_names.push( v.name );
+					column_types.push( v.seed );
+					column_params.push( v.params );
+				}
 			});
 			for( var i = 0; i < params.rows; i ++ ) {
 				// console.log('Seed:: ' + i);
@@ -122,7 +127,7 @@ var rfSQL = {
 
 				var query = "INSERT INTO " + params.table + " ( " + column_names.join() + " ) VALUES ( " + column_count.join() + " )";
 				var values = column_values;
-				//console.log(query, values);
+				console.log(query, values);
 
 				rfSQL.exec({ query: query, values: values, 
 					success: function(data) {

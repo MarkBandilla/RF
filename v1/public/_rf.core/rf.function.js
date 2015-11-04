@@ -1,4 +1,15 @@
 var rfFunction = {
+	urlvars: function () {
+	    var vars = [], hash;
+	    var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
+	    for(var i = 0; i < hashes.length; i++)
+	    {
+	        hash = hashes[i].split('=');
+	        vars.push(hash[0]);
+	        vars[hash[0]] = hash[1];
+	    }
+	    return vars;
+	},
 	migrate2Schema: function (params) {
 		var params = $.extend({
 			table: '',
@@ -8,7 +19,17 @@ var rfFunction = {
 			error: function (data) { console.log (data); }
 		}, params);
 
-		console.log('migrateSchema:: ', params);
+		switch(params.method) {
+			case 'createTable':
+				rfSchema[params.table] = { column: params.column };
+			break;
+			case 'createColumn':
+				var oldColumns = rfSchema[params.table].column;
+				var newColumns = params.column;
+
+				rfSchema[params.table].column = $.merge(newColumns, oldColumns);
+			break;
+		}
 	},
 	migrate2SQL: function (params) {
 		var params = $.extend({
@@ -30,11 +51,7 @@ var rfFunction = {
 		// console.log('Schema:: ' + params.table, schema);
 
 		if(schema) {
-			console.log(params.table + ' : ');
-
-			var column = rfFunction.sort({ array: schema.column, key: 'order' });
-
-			return column;
+			return schema;
 		} else {
 			return 'error';
 		}
