@@ -3,6 +3,8 @@ var rfSQL = {
 	lm: 0,
 
 	init: function () {
+		rfFunction.log('Running SQL Init');
+
 		rfSQL.connect();
 		// rfSQL.migratesqlschema();
 		// rfSQL.migrate();
@@ -21,6 +23,8 @@ var rfSQL = {
 				rfFunction.log('SQL Connect Error:: ' + message);
 			}
 		}, params);
+
+		rfFunction.log('Connecting:: ' + params.dbname);
 
 		var odb = window.openDatabase;
 	    
@@ -46,6 +50,8 @@ var rfSQL = {
 			error: function (t, e) { rfFunction.log('Error:: ' + params.query + ' []'); }
 		}, params);
 
+		rfFunction.log('Running ExecuteSQL');
+
 		if(!this.db) {
 			params.error("Error:: DB does not exists");
 			return;
@@ -56,72 +62,157 @@ var rfSQL = {
 	    });
 	},
 	migratesqlschema: function (params) {
-		rfFunction.log('Running migratesqlschema..');
+		rfFunction.log('Running migratesqlschema..' + rfSQL.lm);
 		var params = $.extend({
 			migratesqlschema: rfMigrateSQLSchema,
-			success: function (data) { rfFunction.log (data); },
+			migrate: false,
+			success: function () { rfSQL.goMigrate(); },
 			error: function (data) { rfFunction.log (data); }
 		}, params);
 
 		var m = params.migratesqlschema;
 		var ml = m.length;
+		var lm = rfSQL.lm;
 
 		$.each(m, function(i) {
 			rfFunction.migrate2Schema({ table: m[i].table, method: m[i].method, column: m[i].column });
 			rfFunction.migrate2SQL({ name: m[i].name, table: m[i].table, method: m[i].method, up: m[i].up, down: m[i].down });
+
+			if((i == lm && !params.migrate) || (ml == i+1 && params.migrate)) {
+				params.success();
+				return false;
+			}
 		});
 	},
-	migrate: function (params) {
+	migrate: function () {
+		rfSQL.migratesqlschema({migrate: true});
+	},
+	goMigrate: function (params) {
+		rfFunction.log('Running goMigrate..');
+
 		var params = $.extend({
 			migration: rfMigration,
 			success: function (data) { 
-				rfSQL.lm = data;
-				rfFunction.updateMigration('migration', rfSQL.lm);
-				rfFunction.log ('Migrated:: ' + data + ' / ' + rfSQL.lm); 
+				if(rfSQL.lm != parseInt(data)) {
+					rfSQL.lm = data;
+					rfFunction.updateMigration('migration', rfSQL.lm);
+					rfFunction.log ('Migrated:: ' + data + ' / ' + rfSQL.lm); 
+				}
 			},
 			error: function (data) { rfFunction.log (data); }
 		}, params);
 
 		var m = params.migration;
-		var result = {};
+		var ml = m.length;
 		var counter = 0;
 
 		$.each(m, function(i) {
-			if(rfSQL.lm <= i) {
-				rfFunction.log('Migrate:: ' + m[i].name);
+			rfFunction.log('Migrate:: ' + m[i].name);
 
-				$.each(m[i].up, function(j){
+			if (m[i].name == "database_reset") {
+				$.each(rfSchema, function(i, value){ 
+					rfFunction.log(i + ' reset..');
+					var query = 'DROP TABLE ' + i;
 					rfSQL.exec({ 
-						query: m[i].up[j], 
-						values: m[i].values, 
+						query: query, 
 						success: function(t, r){
-							
+							rfFunction.log(r);
 						}, 
 						error: function(t, e){
 							rfFunction.log(e.message);
 						} 
 					});
 				});
-			}
-
-			counter ++;
-			if(counter == m.length) {
-				params.success(counter);
+			} else {
+				$.each(m[i].up, function(j){
+					rfFunction.log(m[i].up[j]);
+					rfSQL.exec({ 
+						query: m[i].up[j], 
+						values: m[i].values, 
+						success: function(t, r){
+							rfFunction.log(r);
+						}, 
+						error: function(t, e){
+							rfFunction.log(e.message);
+						} 
+					});
+				});
+			}			
+			if(ml == i+1) {
+				params.success(i);
 			}
 		});
 	},
-	rollback: function (params) {
+	rollback: function (migration) {
+		
+		var m = rfMigration.reverse();
+		var ml = m.length;
+		var counter = 0;
 
+		$.each(m, function(i) {
+			rfFunction.log('Rollback:: ' + m[i].name + m[i].id);
+			if(m[i].id > migration) {
+				if (m[i].name == "database_reset") {
+					$.each(rfSchema, function(i, value){ 
+						rfFunction.log(i + ' reset..');
+						var query = 'DROP TABLE ' + i;
+						rfSQL.exec({ 
+							query: query, 
+							success: function(t, r){
+								rfFunction.log(r);
+							}, 
+							error: function(t, e){
+								rfFunction.log(e.message);
+							} 
+						});
+					});
+				} else {
+					$.each(m[i].up, function(j){
+						rfFunction.log(m[i].down[j]);
+						rfSQL.exec({ 
+							query: m[i].down[j], 
+							values: m[i].values, 
+							success: function(t, r){
+								rfFunction.log(r);
+							}, 
+							error: function(t, e){
+								rfFunction.log(e.message);
+							} 
+						});
+					});
+				}			
+			} else {			
+				rfFunction.updateMigration('migration', migration);
+			}
+		});
 	},
 	seed: function (params) {
 		var params = $.extend({
-			table: 'users',
+			table: 'all',
 			rows: 10,
 			success: function (data) { rfFunction.log (data); },
 			error: function (data) { rfFunction.log (data); }
 		}, params);
 
+		if(params.table == 'all') {
+			$.each(rfSchema, function(i, value){ 
+				rfSQL.goSeed({table: i, rows: params.rows}); 
+			});
+		} else {
+			rfSQL.goSeed({table: params.table, rows: params.rows});
+		}
+	},
+	goSeed: function (params) {
+		var params = $.extend({
+			table: '',
+			rows: 10,
+			success: function (t, r) { rfFunction.log ('Seeded:: ' + params.table + ', ' + params.rows + ' rows'); },
+			error: function (t, e) { rfFunction.log (e.message); }
+		}, params);
+
 		var schema = rfFunction.schema({ table: params.table }).column;
+		rfFunction.log('Seeding:: ' + params.table);
+		rfFunction.log(schema);
 
 		if(schema) {
 			var column_names = [];
@@ -155,11 +246,11 @@ var rfSQL = {
 				// rfFunction.log(query, values);
 
 				rfSQL.exec({ query: query, values: values, 
-					success: function(data) {
-						// params.success({ table: params.table, query: this.query, values: this.values });
+					success: function(t, r) {
+						params.success(t, r);
 					},
-					error: function(data) {
-						params.error(data);
+					error: function(t, e) {
+						params.error(t, e);
 					}
 				});
 
@@ -168,5 +259,5 @@ var rfSQL = {
 		} else {
 			params.error('Error:: Could not read schema from ' + params.table);
 		}
-	},
+	}
 };

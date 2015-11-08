@@ -1,5 +1,6 @@
 var rfFunction = {
-	dev: false,
+	dev: true,
+
 	log: function(message) {
 		if(rfFunction.dev) {
 			console.log(message);
@@ -68,9 +69,10 @@ var rfFunction = {
 			case 'migration':
 				rfSQL.exec({ 
 					query: rfQuery.updateMigrationSettings,
-					values: [value, property],
+					values: [value, moment().format('YYYY-MM-DD hh:mm:ss'), property],
 					success: function(t, r) {
 						rfFunction.log('Migration updated!');
+						location.reload();
 					},
 					error: function(t, e) {
 						rfFunction.log('Migration update failed!');
@@ -113,8 +115,8 @@ var rfFunction = {
 			name: '',
 			table: '',
 			method: '',
-			up: '',
-			down: '',
+			up: [],
+			down: [],
 			success: function (data) { rfFunction.log (data, 'migrate2SQL:: ' + params.table); },
 			error: function (data) { rfFunction.log (data); }
 		}, params);

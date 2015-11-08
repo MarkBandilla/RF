@@ -14,7 +14,7 @@ var rfQuery = {
 			'VALUES ("migration", 0, "' + moment().format('YYYY-MM-DD hh:mm:ss') + '", "' + moment().format('YYYY-MM-DD hh:mm:ss') + '")'
 	],
 	getMigrationSettings: 'SELECT * FROM rf_migration',
-	updateMigrationSettings: 'UPDATE rf_migration SET value = ? WHERE property = ?',
+	updateMigrationSettings: 'UPDATE rf_migration SET value = ?, modified_at = ? WHERE property = ?',
 	insertUsers: {
 		query: 'INSERT INTO users (username, fullname, password) VALUES (?, ?, ?)',
 		values: ['mark', 'mark bandilla', 'pogiako']

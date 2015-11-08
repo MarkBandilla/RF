@@ -3,8 +3,7 @@ var rfMigrateSQLSchema = [
 		id: 0,
 		table: '',
 		name: 'database_reset',
-		method: 'resetDataBase',
-		up: ['DROP TABLE users','DROP TABLE rf_input_types'],
+		method: 'resetDataBase'
 	}, {
 		id: 1,
 		table: 'users',
@@ -23,7 +22,9 @@ var rfMigrateSQLSchema = [
             'modified_at DATETIME' +
         ')' 
 		],
-		down: 'DROP TABLE users',
+		down: [
+		'DROP TABLE users'
+		]
 	}, {
 		id: 2,
 		table: 'users',
@@ -109,13 +110,15 @@ var rfMigrateSQLSchema = [
 			{ type: 'datetime_now', name: 'modified_at', seed: 'datetime_now', order: 0 }
 		],
 		up: [
-		'CREATE TABLE IF NOT EXISTS rf_input_types (' +
-            'id INTEGER PRIMARY KEY,' +
-            'created_at DATETIME,' +
-            'modified_at DATETIME' +
-        ')' 
+			'CREATE TABLE IF NOT EXISTS rf_input_types (' +
+	            'id INTEGER PRIMARY KEY,' +
+	            'created_at DATETIME,' +
+	            'modified_at DATETIME' +
+	        ')' 
 		],
-		down: 'DROP TABLE rf_input_types',
+		down: [
+			'DROP TABLE rf_input_types'
+		]
 	}, {
 		id: 4,
 		table: 'rf_input_types',
