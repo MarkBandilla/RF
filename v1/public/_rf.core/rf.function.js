@@ -1,4 +1,10 @@
 var rfFunction = {
+	dev: false,
+	log: function(message) {
+		if(rfFunction.dev) {
+			console.log(message);
+		}
+	},
 	urlvars: function () {
 	    var vars = [], hash;
 	    var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
@@ -10,13 +16,78 @@ var rfFunction = {
 	    }
 	    return vars;
 	},
+	getMigration: function (params) {
+		rfFunction.log('Get Migration Settings..');
+		var params = $.extend({
+			success: function (data) { rfFunction.log (data); },
+			error: function (data) { rfFunction.log (data); }
+		}, params);
+
+		rfSQL.exec({ 
+			query: rfQuery.getMigrationSettings,
+			success: function(t, r) {
+				rfFunction.log('Migration Settings found!');
+				rfFunction.setMigration(t, r);
+			},
+			error: function() {
+				rfFunction.log('No Migration Settings found!');
+				rfFunction.initMigration();
+			}
+		});	
+	},
+	initMigration: function() {
+		rfFunction.log('Building Initial Migration Settup..');
+
+		var m = rfQuery.createMigration;
+		var ml = m.length;
+
+		for(i = 0; i < ml; i++) {
+			rfSQL.exec({ 
+				query: m[i]
+			});
+
+			if(ml == i + 1) rfFunction.getMigration();
+		};	
+	},
+	setMigration: function (t, r) {
+		rfFunction.log('Setting up Migration Settings..');
+		$.each(r.rows, function(index, row){
+			switch(row.property) {
+				case 'migration':
+					rfSQL.lm = parseInt(row.value);
+				break;
+			}		
+		});
+
+		rfSQL.migratesqlschema();
+	},
+	updateMigration: function (property, value) {
+		rfFunction.log('Updating Migration Settings..');
+
+		switch(property) {
+			case 'migration':
+				rfSQL.exec({ 
+					query: rfQuery.updateMigrationSettings,
+					values: [value, property],
+					success: function(t, r) {
+						rfFunction.log('Migration updated!');
+					},
+					error: function(t, e) {
+						rfFunction.log('Migration update failed!');
+						rfFunction.log(e.message);
+					}
+				});	
+			break;
+		}
+	},
 	migrate2Schema: function (params) {
+		rfFunction.log('Running migrate2Schema..');
 		var params = $.extend({
 			table: '',
 			method: '',
 			column: [],
-			success: function (data) { console.log (data, 'migrate2Schema:: ' + params.table); },
-			error: function (data) { console.log (data); }
+			success: function (data) { rfFunction.log (data, 'migrate2Schema:: ' + params.table); },
+			error: function (data) { rfFunction.log (data); }
 		}, params);
 
 		switch(params.method) {
@@ -37,15 +108,18 @@ var rfFunction = {
 		}
 	},
 	migrate2SQL: function (params) {
+		rfFunction.log('Running migrate2SQL..');
 		var params = $.extend({
 			name: '',
 			table: '',
 			method: '',
 			up: '',
 			down: '',
-			success: function (data) { console.log (data, 'migrate2SQL:: ' + params.table); },
-			error: function (data) { console.log (data); }
+			success: function (data) { rfFunction.log (data, 'migrate2SQL:: ' + params.table); },
+			error: function (data) { rfFunction.log (data); }
 		}, params);
+
+		if (rfMigration == "[]") rfMigration = [];
 
 		rfMigration.push({
 			id: rfMigration.length,
@@ -62,7 +136,7 @@ var rfFunction = {
 		}, params);
 
 		var schema = rfSchema[params.table];
-		// console.log('Schema:: ' + params.table, schema);
+		// rfFunction.log('Schema:: ' + params.table, schema);
 
 		if(schema) {
 			return schema;

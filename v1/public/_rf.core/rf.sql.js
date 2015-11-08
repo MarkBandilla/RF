@@ -4,10 +4,10 @@ var rfSQL = {
 
 	init: function () {
 		rfSQL.connect();
-		rfSQL.migratesqlschema();
-		rfSQL.migrate();
-		rfSQL.seed();
-		rfSQL.seed({table: 'rf_input_types'});
+		// rfSQL.migratesqlschema();
+		// rfSQL.migrate();
+		// rfSQL.seed();
+		// rfSQL.seed({table: 'rf_input_types'});
 	},
 	connect: function (params) {
 		var params = $.extend({
@@ -15,10 +15,10 @@ var rfSQL = {
 			version: '1.0',
 			description: 'no description',
 			success: function (message) {
-				console.log('Connected:: ' + message);
+				rfFunction.log('Connected:: ' + message);
 			},
 			error: function (message) {
-				console.log('SQL Connect Error:: ' + message);
+				rfFunction.log('SQL Connect Error:: ' + message);
 			}
 		}, params);
 
@@ -31,15 +31,19 @@ var rfSQL = {
 	    	if(params.dbname === null) return params.error('Project Undefined');
 
 	        this.db = odb( params.dbname, params.version, params.description, 10 * 1024 * 1024 );
+	        
+	        rfFunction.getMigration();
+
 	        params.success(params.dbname + ', ' + params.version + ', ' + params.description);
+
 	    }
 	},
 	exec: function (params) {
 		var params = $.extend({
 			query: '',
 			values: [],
-			success: function (data) { console.log (JSON.stringify(data)); },
-			error: function (data) { console.log (data); }
+			success: function (t, r) { rfFunction.log('ExecuteSQL:: ' + params.query + ' []'); },
+			error: function (t, e) { rfFunction.log('Error:: ' + params.query + ' []'); }
 		}, params);
 
 		if(!this.db) {
@@ -48,27 +52,19 @@ var rfSQL = {
 		} 
 
 		this.db.transaction(function (t) {
-	        t.executeSql(params.query, params.values, 
-	        	function (t, r) {
-		            params.success(r.rows);
-		        }, function (t, e) {
-		        	params.error("Error:: '" + params.query + "', [" + params.values.join() + "] : " + e.message);
-		        }
-	        );
-	    }, function (t, e){ 
-			params.success('Insert row: ' + e.message); 
-		}, function() {
-            
-        });
+	        t.executeSql(params.query, params.values, params.success, params.error);
+	    });
 	},
 	migratesqlschema: function (params) {
+		rfFunction.log('Running migratesqlschema..');
 		var params = $.extend({
 			migratesqlschema: rfMigrateSQLSchema,
-			success: function (data) { console.log (data); },
-			error: function (data) { console.log (data); }
+			success: function (data) { rfFunction.log (data); },
+			error: function (data) { rfFunction.log (data); }
 		}, params);
 
 		var m = params.migratesqlschema;
+		var ml = m.length;
 
 		$.each(m, function(i) {
 			rfFunction.migrate2Schema({ table: m[i].table, method: m[i].method, column: m[i].column });
@@ -78,8 +74,12 @@ var rfSQL = {
 	migrate: function (params) {
 		var params = $.extend({
 			migration: rfMigration,
-			success: function (data) { console.log ('Migrated:: ' + data + ' / ' + rfSQL.lm); },
-			error: function (data) { console.log (data); }
+			success: function (data) { 
+				rfSQL.lm = data;
+				rfFunction.updateMigration('migration', rfSQL.lm);
+				rfFunction.log ('Migrated:: ' + data + ' / ' + rfSQL.lm); 
+			},
+			error: function (data) { rfFunction.log (data); }
 		}, params);
 
 		var m = params.migration;
@@ -88,20 +88,17 @@ var rfSQL = {
 
 		$.each(m, function(i) {
 			if(rfSQL.lm <= i) {
+				rfFunction.log('Migrate:: ' + m[i].name);
+
 				$.each(m[i].up, function(j){
 					rfSQL.exec({ 
 						query: m[i].up[j], 
 						values: m[i].values, 
-						success: function(data){
-							result = { status: 'Success::', name: m[i].name, query: m[i].up[j], data: data };
-							rfSQL.lm = m[i].id;
-
-							// params.success(result);
-						}, 
-						error: function(data){ 
-							result = { status: 'Error::', name: m[i].name, query: m[i].up, data: data };
+						success: function(t, r){
 							
-							params.error(result); 
+						}, 
+						error: function(t, e){
+							rfFunction.log(e.message);
 						} 
 					});
 				});
@@ -120,8 +117,8 @@ var rfSQL = {
 		var params = $.extend({
 			table: 'users',
 			rows: 10,
-			success: function (data) { console.log (data); },
-			error: function (data) { console.log (data); }
+			success: function (data) { rfFunction.log (data); },
+			error: function (data) { rfFunction.log (data); }
 		}, params);
 
 		var schema = rfFunction.schema({ table: params.table }).column;
@@ -140,7 +137,7 @@ var rfSQL = {
 			});
 
 			for( var i = 0; i < params.rows; i ++ ) {
-				// console.log('Seed:: ' + i);
+				// rfFunction.log('Seed:: ' + i);
 
 				var column_count = [];
 				var column_values = [];
@@ -150,12 +147,12 @@ var rfSQL = {
 
 					column_values.push(faker);
 					column_count.push('?');
-					// console.log(i + ' ' + column_names[j] + ' : ' + column_types[j] + ' - ' + column_values[j]);
+					// rfFunction.log(i + ' ' + column_names[j] + ' : ' + column_types[j] + ' - ' + column_values[j]);
 				}
 
 				var query = "INSERT INTO " + params.table + " ( " + column_names.join() + " ) VALUES ( " + column_count.join() + " )";
 				var values = column_values;
-				// console.log(query, values);
+				// rfFunction.log(query, values);
 
 				rfSQL.exec({ query: query, values: values, 
 					success: function(data) {
