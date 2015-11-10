@@ -1,3 +1,8 @@
+// Data Store
+var rfMigration = [];
+var rfSchema = {};
+
+// Migration Store
 var rfMigrateSQLSchema = [
 	{
 		id: 0,
@@ -315,10 +320,7 @@ var rfMigrateSQLSchema = [
 	}
 ]
 
-var rfMigration = [];
-
-var rfSchema = {};
-
+// Preparations
 var rfInput = [
 	{
 		id: 1,
