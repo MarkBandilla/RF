@@ -1,14 +1,19 @@
 <html>
 	<head>
-		<title>RF-Coder</title>
+		<title>RF-Dbase</title>
 
 		<meta name="author" content="Mark Daniel G. Bandilla">
 		<meta name="keywords" content="online code editor, code editor">
-		<meta name="description" content="Web Page made with RF-Coder">
+		<meta name="description" content="Web Page made with RF-Builder">
+
+		<link rel="stylesheet" href="../lib/css/w2ui-1.4.3.min.css">
 
 		<!-- css cdn -->
 		<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
 		<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+		<link rel="stylesheet" href="../lib/css/rf.styles.css">
+		<link rel="stylesheet" href="../lib/css/rf.scrollbar.css">
 
 		<!-- custom style -->
 		<style>
@@ -17,6 +22,82 @@
 	</head>
 	<body>
 		<!-- content -->
+	   <div id="layout" style="width: 100%; height: 100%;"></div>
+	   <div id="templates" class="hidden">
+	      <div id="tplTop">
+	        <div class="pull-left">
+	            <h5><b>ReFlex - DBase</b></h5>
+	        </div>
+	        <!-- <div class="pull-right">
+	            <div id="ctrlLayoutButtons" class="btn-group" role="group">
+	                <a class="btn btn-default" onclick="w2ui['layout'].toggle('left', false)" style="border-radius: 0px !important;">
+	                    <i class="fa fa-database"></i>
+	                </a>
+	                <a class="btn btn-default" onclick="w2ui['layout'].toggle('preview', false)">
+	                    <i class="fa fa-list"></i>
+	                </a>
+	                <a class="btn btn-default" onclick="w2ui['layout'].toggle('right', false)" style="border-radius: 0px !important;">
+	                    <i class="fa fa-retweet"></i>
+	                </a>
+	            </div>
+	        </div> -->
+	        <div class="pull-right" style="width: 349px;">
+	            <select class="form-control" style="border-radius: 0px !important;">
+	                <option><i class="fa fa-home"></i> Coder</option>
+	                <option>Designer</option>
+	                <option selected>DBase Manager</option>
+	                <option>Function Builder</option>
+	                <option>Tester</option>
+	            </select>
+	        </div>
+	        <div class="pull-right" style="margin-right: 5px;">
+	            <div id="ctrlLayoutButtons" class="btn-group" role="group">
+	                <a class="btn btn-default" style="border-radius: 0px !important;" disabled>
+	                    <i class="fa fa-save"></i>
+	                    Save
+	                </a>
+	                <a class="btn btn-default" style="border-radius: 0px !important;">
+	                    <i class="fa fa-bolt"></i>
+	                    Publish
+	                </a>
+	                <a class="btn btn-default" style="border-radius: 0px !important;">
+	                    <i class="fa fa-share-square-o"></i>
+	                    Export
+	                </a>
+	            </div>
+	        </div>
+	      </div>
+	      <div id="tplMain">
+	      	<div class="content">
+		      	<h4><i class="fa fa-list"></i> Columns</h4>
+		        <ul id="dbColumns" class="list-group">
+		        </ul> 
+		        <template id="tpl_dbColumns">
+					<li class="list-group-item">{{type}} : {{name}} : {{seed}}</li>
+		        </template>
+	        </div>
+	      </div>
+	      <div id="tplLeft">
+	      	<div class="content">
+		      	<h4><i class="fa fa-database"></i> Tables</h4>
+		        <ul id="dbTables" class="list-group">
+		        </ul> 
+		        <template id="tpl_dbTables">
+					<button class="list-group-item" onclick="listColumns('{{name}}')">{{name}}</a> : {{columns}}</button>
+		        </template>
+	        </div>
+	      </div>
+	      <div id="tplRight">
+	      	<div class="content">
+		      	<h4><i class="fa fa-retweet"></i> Migrations</h4>
+		        <ul id="dbMigrations" class="list-group">
+		        </ul> 
+		        <template id="tpl_dbMigrations">
+					<button class="list-group-item" onclick="switchMigrate({{id}})">{{id}} : {{name}}</button>
+		        </template>
+	        </div>
+	      </div>
+	   </div>
 	
 
 		<!-- script cdn -->
@@ -26,11 +107,14 @@
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/Faker/3.0.1/faker.min.js"></script>
 		<script src="http://momentjs.com/downloads/moment.min.js"></script>
 
+		<script src="../lib/js/w2ui-1.4.3.min.js"></script>
+
 		<!-- rf.core -->
 		<script src="rf.query.js"></script>
 		<script src="rf.function.js"></script>
 		<script src="rf.migrate.js"></script>
 		<script src="rf.sql.js"></script>
+		<script src="database.js"></script>
 
 		<!-- custom script -->
 		<script>

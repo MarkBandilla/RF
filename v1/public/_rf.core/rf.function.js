@@ -108,6 +108,8 @@ var rfFunction = {
 				rfSchema[params.table].column = $.merge(newColumns, oldColumns);
 			break;
 		}
+
+		listTables();
 	},
 	migrate2SQL: function (params) {
 		rfFunction.log('Running migrate2SQL..');

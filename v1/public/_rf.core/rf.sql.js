@@ -66,12 +66,15 @@ var rfSQL = {
 		var params = $.extend({
 			migratesqlschema: rfMigrateSQLSchema,
 			migrate: false,
+			limit: 0,
 			success: function () { rfSQL.goMigrate(); },
 			error: function (data) { rfFunction.log (data); }
 		}, params);
 
 		var m = params.migratesqlschema;
-		var ml = m.length;
+
+		if(params.limit != 0) var ml = params.limit;
+		else var ml = m.length;
 		var lm = rfSQL.lm;
 
 		$.each(m, function(i) {
@@ -84,8 +87,8 @@ var rfSQL = {
 			}
 		});
 	},
-	migrate: function () {
-		rfSQL.migratesqlschema({migrate: true});
+	migrate: function (limit) {
+		rfSQL.migratesqlschema({migrate: true, limit: limit});
 	},
 	goMigrate: function (params) {
 		rfFunction.log('Running goMigrate..');
