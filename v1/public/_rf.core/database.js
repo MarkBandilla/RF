@@ -15,6 +15,19 @@ function initLayout() {
       style: tstyle, 
       content: $('#tplTop').html()
     },{
+      type: 'main'
+    }, {
+      type: 'preview',
+      size: '30%',
+      resizable: true,
+      style: sstyle,
+      content: $('#tplPreview').html()
+    }]
+  });
+
+  $().w2layout({
+    name: 'layout2',
+    panels: [{
       type: 'main',
       style: pstyle,
       content: $('#tplMain').html()
@@ -33,11 +46,18 @@ function initLayout() {
     }]
   });
 
+  w2ui['layout'].content('main', w2ui['layout2']);
+
   $('#templates').remove();
 }
 
 
+function listData(table) {
+  listColumns(table);
+  listRows(table);
 
+  return false;
+}
 function listTables() {
   var template = $('#tpl_dbTables').html();
   $('#dbTables').html('');
@@ -58,8 +78,44 @@ function listColumns(table) {
     var html = Mustache.render(template, value);
     $('#dbColumns').append(html);    
   });
+}
+function listRows(table) {
+  var templateHead = $('#tpl_dbRowsHead').html();
+  var templateBody = $('#tpl_dbRowsBody').html();
 
-  return false;
+  $('#dbRows').html('<thead></thead><tbody></tbody>');
+
+  var rowshead = rfFunction.sort({array: rfSchema[table].column, key: 'order'});
+
+  $('#dbRows thead').append('<tr></tr>'); 
+
+  $.each(rowshead, function(i, value){
+    var html = Mustache.render(templateHead, value);
+    $('#dbRows thead tr').append(html); 
+  });
+
+  var query = 'SELECT * FROM ' + table;
+
+
+
+  rfSQL.exec({
+    query: query, 
+    success: function(t, r) {
+      $.each(r.rows, function(row, value){
+        $('#dbRows tbody').append('<tr></tr>'); 
+        $.each(rowshead, function(column, value){
+          var column = value.name;
+          var html = '<td>' + r.rows[row][column] + '</td>';
+          console.log(html);
+          $('#dbRows tbody tr').append(html); 
+        });
+      });
+    },
+    error: function(t, e) {
+      alert(e.message);
+    }
+  });
+   
 }
 function listMigration() {
   $('#dbMigrations').html('');

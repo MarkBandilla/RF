@@ -77,13 +77,28 @@
 		        </template>
 	        </div>
 	      </div>
+	      <div id="tplPreview">
+	      	<div class="content">
+		      	<h4><i class="fa fa-table"></i> Rows</h4>
+		      	<table class="table" id="dbRows">
+		      		<thead></thead>
+		      		<tbody></tbody>
+		      	</table>
+		        <template id="tpl_dbRowsHead">
+					<th>{{name}}</th>
+		        </template>		     
+		        <template id="tpl_dbRowsBody">
+					<td>{{value}}</td>     	
+		        </template>		  	
+	        </div>
+	      </div>
 	      <div id="tplLeft">
 	      	<div class="content">
 		      	<h4><i class="fa fa-database"></i> Tables</h4>
 		        <ul id="dbTables" class="list-group">
 		        </ul> 
 		        <template id="tpl_dbTables">
-					<button class="list-group-item" onclick="listColumns('{{name}}')">{{name}}</a> : {{columns}}</button>
+					<button class="list-group-item" onclick="listData('{{name}}')">{{name}}</a> : {{columns}}</button>
 		        </template>
 	        </div>
 	      </div>
