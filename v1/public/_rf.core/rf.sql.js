@@ -73,15 +73,25 @@ var rfSQL = {
 
 		var m = params.migratesqlschema;
 
+		// alert(params.limit);
+
 		if(params.limit != 0) var ml = params.limit;
 		else var ml = m.length;
 		var lm = rfSQL.lm;
 
-		$.each(m, function(i) {
-			rfFunction.migrate2Schema({ table: m[i].table, method: m[i].method, column: m[i].column });
-			rfFunction.migrate2SQL({ name: m[i].name, table: m[i].table, method: m[i].method, up: m[i].up, down: m[i].down });
+		// Reset Data Store
+		rfMigration = [];
+		rfSchema = {};
 
-			if((i == lm && !params.migrate) || (ml == i+1 && params.migrate)) {
+		$.each(m, function(i) {		
+			if((i <= lm && !params.migrate) || (ml >= i && params.migrate)) {
+				console.log('lm: ' + lm + ', ml: ' + ml + ', i: ' + i);	
+				rfFunction.migrate2Schema({ table: m[i].table, method: m[i].method, column: m[i].column });
+				rfFunction.migrate2SQL({ name: m[i].name, table: m[i].table, method: m[i].method, up: m[i].up, down: m[i].down, values: m[i].values });
+
+				if((ml == i && params.migrate))
+				params.success();
+			} else {
 				params.success();
 				return false;
 			}
@@ -129,6 +139,7 @@ var rfSQL = {
 			} else {
 				$.each(m[i].up, function(j){
 					rfFunction.log(m[i].up[j]);
+					rfFunction.log(m[i].values);
 					rfSQL.exec({ 
 						query: m[i].up[j], 
 						values: m[i].values, 

@@ -110,6 +110,7 @@ var rfFunction = {
 		}
 
 		listTables();
+		listMigration();
 	},
 	migrate2SQL: function (params) {
 		rfFunction.log('Running migrate2SQL..');
@@ -119,6 +120,7 @@ var rfFunction = {
 			method: '',
 			up: [],
 			down: [],
+			values: [],
 			success: function (data) { rfFunction.log (data, 'migrate2SQL:: ' + params.table); },
 			error: function (data) { rfFunction.log (data); }
 		}, params);
@@ -131,7 +133,8 @@ var rfFunction = {
 			table: params.table,
 			method: params.method,
 			up: params.up,
-			down: params.down
+			down: params.down,
+			values: params.values
 		});
 	},
 	schema: function (params) {

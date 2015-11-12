@@ -28,8 +28,9 @@ var rfMigrateSQLSchema = [
         ')' 
 		],
 		down: [
-		'DROP TABLE users'
-		]
+		'DROP TABLE IF EXISTS users'
+		],
+		values: []
 	}, {
 		id: 2,
 		table: 'users',
@@ -94,17 +95,37 @@ var rfMigrateSQLSchema = [
 			'ALTER TABLE users ADD fullname VARCHAR(100)',
 			'ALTER TABLE users ADD email VARCHAR(150)',
 			'ALTER TABLE users ADD password VARCHAR(250)',
-			'ALTER TABLE users ADD avatar VARCHAR(200)'
+			'ALTER TABLE users ADD avatar TEXT'
 		],
 		down: [
 			'ALTER TABLE users DROP fullname VARCHAR(100)',
 			'ALTER TABLE users DROP email VARCHAR(150)',
 			'ALTER TABLE users DROP password VARCHAR(250)',
-			'ALTER TABLE users DROP avatar VARCHAR(200)'
+			'ALTER TABLE users DROP avatar TEXT'
 		],
 		values: []
 	}, {
 		id: 3,
+		table: 'users',
+		created_at: '2015-11-03 01:58:34',
+		name: 'create_row_into_users',
+		method: 'createRow',
+		up: [
+			'INSERT INTO users (fullname, email, password, avatar, created_at, modified_at) VALUES (?, ?, ?, ?, ?, ?)'
+		],
+		down: [
+			'DELETE FROM users WHERE fullname=? AND email=? AND password=? AND avatar=?'
+		],
+		values: [
+			'Mark Daniel Bandilla', 
+			'markbandilla.dpwm@yahoo.com', 
+			'mark', 
+			'test',
+			moment().format('YYYY-MM-DD hh:mm:ss'),
+			moment().format('YYYY-MM-DD hh:mm:ss')
+		]
+	}, {
+		id: 4,
 		table: 'rf_input_types',
 		name: 'create_table_rf_input_types',
 		created_at: '2015-11-03 01:58:34',
@@ -122,10 +143,11 @@ var rfMigrateSQLSchema = [
 	        ')' 
 		],
 		down: [
-			'DROP TABLE rf_input_types'
-		]
+			'DROP TABLE IF EXISTS rf_input_types'
+		],
+		values: []
 	}, {
-		id: 4,
+		id: 5,
 		table: 'rf_input_types',
 		created_at: '2015-11-03 01:58:34',
 		name: 'create_column_into_rf_input_types',

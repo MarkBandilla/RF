@@ -34,9 +34,6 @@ function initLayout() {
   });
 
   $('#templates').remove();
-
-  listTables();
-  listMigration();
 }
 
 
@@ -65,9 +62,10 @@ function listColumns(table) {
   return false;
 }
 function listMigration() {
-  var template = $('#tpl_dbMigrations').html();
   $('#dbMigrations').html('');
   $.each(rfMigrateSQLSchema, function(i){
+    if(rfSQL.lm >= i) var template = $('#tpl_dbMigrations_active').html();
+    else var template = $('#tpl_dbMigrations').html();
     var html = Mustache.render(template, rfMigrateSQLSchema[i]);
     $('#dbMigrations').append(html);
   });

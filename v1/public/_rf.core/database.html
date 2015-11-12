@@ -95,6 +95,9 @@
 		        <template id="tpl_dbMigrations">
 					<button class="list-group-item" onclick="switchMigrate({{id}})">{{id}} : {{name}}</button>
 		        </template>
+		        <template id="tpl_dbMigrations_active">
+					<button class="list-group-item" style="color: #337ab7;" onclick="switchMigrate({{id}})">{{id}} : {{name}}</button>
+		        </template>
 	        </div>
 	      </div>
 	   </div>
